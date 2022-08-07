@@ -4,41 +4,39 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayCreature : MonoBehaviour
+public class DisplayCreature : DisplayBase
 {
-    public CreatureCard card;
+    //public CreatureCard card;
 
     public TextMeshProUGUI txtHealth;
-    public TextMeshProUGUI txtName;
+    //public TextMeshProUGUI txtName;
     public TextMeshProUGUI txtCost;
     public Image imgTaunt;
     public Image imgFaction;
-    public Image imgSprite;
-    public Image imgBorder;
+    //public Image imgSprite;
+    //public Image imgBorder;
 
-    public GameObject abilityContainer;
-    public TextMeshProUGUI abilityTextTemplate;
+    //public GameObject abilityContainer;
+    //public TextMeshProUGUI abilityTextTemplate;
 
     // Start is called before the first frame update
-    public void FillCard()
+    public override void FillCard()
     {
-        txtHealth.text = card.health.ToString();
-        txtName.text = card.name.ToString();
-        txtCost.text = card.cost.ToString();
-        imgTaunt.color = new Color(imgTaunt.color.r, imgTaunt.color.g, imgTaunt.color.b, card.hasTaunt ? 255 : 0);
+        var cCard = (CreatureCard)card;
 
-        var factionColor = ColorHelper.GetFactionColor(card.faction);
+        txtHealth.text = cCard.health.ToString();
+        txtName.text = cCard.name.ToString();
+        txtCost.text = cCard.cost.ToString();
+        imgTaunt.color = new Color(imgTaunt.color.r, imgTaunt.color.g, imgTaunt.color.b, cCard.hasTaunt ? 255 : 0);
+
+        var factionColor = ColorHelper.GetFactionColor(cCard.faction);
         imgFaction.color = factionColor;
         imgBorder.color = factionColor;
 
         //todo: display other ability types
-        foreach (var fx in card.instantEffect)
+        foreach (var fx in cCard.tapEffect)
         {
-            var ability = Instantiate(abilityTextTemplate, abilityContainer.transform);
-            ability.text = fx.GetType().ToString();
-            ability.gameObject.SetActive(true);
+            AddEffectText(fx.GetEffectDesc());
         }
     }
-
-    
 }

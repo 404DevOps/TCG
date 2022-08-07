@@ -7,25 +7,43 @@ public class DiscardPile : MonoBehaviour
     public Owner owner;
     public List<CardBase> cards;
 
-    CardPlaceholder topCard;
+    public GameObject cardPlaceholderPrefab;
     // Start is called before the first frame update
     private void Start()
     {
         cards = new List<CardBase>();
     }
 
-    void AddCardToPile(CardBase card)
+    public void AddCardToPile(CardBase card)
     {
-        cards.Add(card);
-        topCard.card = card;
-        topCard.gameObject.SetActive(true);
+        DestroyChildObjects();
 
+        cards.Add(card);
+
+        var newCard = Instantiate(cardPlaceholderPrefab, transform);
+        var cardDisplay = newCard.GetComponent<CardPlaceholder>();
+        cardDisplay.card = card;
     }
-    List<CardBase> EmptyPile()
+    public List<CardBase> EmptyPile()
     {
+        //destroy placeholder
+        DestroyChildObjects();
+
         var pile = cards;
         cards = new List<CardBase>();
         return pile;
         
+    }
+
+    void DestroyChildObjects()
+    {
+        //destroy placeholder and instantiate new one
+        if (transform.childCount > 0)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+        }
     }
 }

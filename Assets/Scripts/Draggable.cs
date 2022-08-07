@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler//, IPointerEnterHandler, IPointerExitHandler
+public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     Vector3 startPos;
     Vector3 endPos;
+
+    CardBase card;
 
     bool dropped = false;
 
@@ -14,6 +17,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     // Start is called before the first frame update
     void Start()
     {
+        card = GetComponent<DisplayBase>().card;
         startPos = transform.position;
     }
 
@@ -21,7 +25,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (dropped)
             return;
-        Debug.Log("BeginDrag");
       
             startPos = transform.position;
     }
@@ -47,6 +50,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             if (dropTarget.childCount > 0)
             {
                 SetChildPosition();
+            }
+
+            card.ApplyInstantEffects();
+            if (!card.isPermanent)
+            {
+                StartCoroutine(WaitForDiscard());
             }
 
             dropped = true;
@@ -93,23 +102,36 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         var dropZone = collision.gameObject.GetComponent<DropZone>();
         if (dropZone != null && dropZone.owner == Owner.Player)
         {
-            Debug.Log("DropZone is Player");
+            //Drop on Field
             if (dropZone.transform.childCount < 7)
             {
                 dropTarget = dropZone.transform;
-                Debug.Log("Field set as Target");
+                Debug.Log("Field " + dropZone.name + " set as Target");
             }
-            else 
+            else
             {
                 dropTarget = null;
                 Debug.Log("Field already full.");
             }
-                
+        }
+        else 
+        {
+            Debug.Log("No Drop Target set.");
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        Debug.Log("Drop Target reset.");
         dropTarget = null;
+    }
+
+    IEnumerator WaitForDiscard()
+    {
+        yield return new WaitForSeconds(1);
+
+        var discardPile = FindObjectsOfType<DiscardPile>().Where(m => m.owner == Owner.Player).First();
+        discardPile.AddCardToPile(card);
+        Destroy(gameObject);
     }
 }

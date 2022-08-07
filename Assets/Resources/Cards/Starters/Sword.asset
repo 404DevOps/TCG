@@ -16,4 +16,9 @@ MonoBehaviour:
   description: 
   sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   isPermanent: 0
-  instantEffect: []
+  instantEffect:
+  - effectType: 1
+    amount: 1
+    targetsCreature: 0
+    target: 0
+    Description: Gain {0} Damage

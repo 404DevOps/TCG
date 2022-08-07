@@ -9,20 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0db2d1d8adfd6ed4ba6b57e34be1f053, type: 3}
-  m_Name: Fireball
+  m_Script: {fileID: 11500000, guid: 394d815cec4ab4e4d8f080d5a10df354, type: 3}
+  m_Name: Vampire
   m_EditorClassIdentifier: 
-  name: Fireball
+  name: Vamp
   description: 
   sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  isPermanent: 0
+  isPermanent: 1
   instantEffect:
   - effectType: 1
-    amount: 5
+    amount: 3
     targetsCreature: 0
     target: 0
     Description: Gain {0} Damage
-  faction: 2
-  cost: 3
+  faction: 1
+  cost: 5
   comboEffect: []
   sacrificeEffect: []
+  health: 3
+  hasTaunt: 0
+  tapEffect: []

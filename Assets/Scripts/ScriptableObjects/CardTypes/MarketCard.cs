@@ -6,7 +6,7 @@ public class MarketCard : CardBase
 {
     //market cards
     public Faction faction;
-    public uint cost;
+    public int cost;
     public List<CardEffectBase> comboEffect;
     public List<CardEffectBase> sacrificeEffect; //firegems are market cards too
 }

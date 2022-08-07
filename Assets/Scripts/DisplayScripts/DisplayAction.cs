@@ -4,37 +4,38 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayAction : MonoBehaviour
+public class DisplayAction : DisplayBase
 {
-    public ActionCard card;
+    //public ActionCard card;
 
-    public TextMeshProUGUI txtName;
+    //public TextMeshProUGUI txtName;
     public TextMeshProUGUI txtCost;
     public Image imgFaction;
-    public Image imgSprite;
-    public Image imgBorder;
+    //public Image imgSprite;
+    //public Image imgBorder;
 
-    public GameObject abilityContainer;
-    public TextMeshProUGUI abilityTextTemplate;
+    //public GameObject abilityContainer;
+    //public TextMeshProUGUI abilityTextTemplate;
 
     // Start is called before the first frame update
-    public void FillCard()
+    public override void FillCard()
     {
+        var aCard = (ActionCard)card;
+
         txtName.text = card.name.ToString();
-        txtCost.text = card.cost.ToString();
+        txtCost.text = aCard.cost.ToString();
 
-        var factionColor = ColorHelper.GetFactionColor(card.faction);
-        imgFaction.color = factionColor;
+        var factionColor = ColorHelper.GetFactionColor(aCard.faction);
+        if (aCard.faction != Faction.Neutral)
+        {
+            imgFaction.color = factionColor;
+        }
+        else 
+        {
+            //remove faction image if its a firegem
+            imgFaction.gameObject.SetActive(false);
+        }
+
         imgBorder.color = factionColor;
-
-        //todo: display other ability types
-        //foreach (var fx in card.instantEffect)
-        //{
-        //    var ability = Instantiate(abilityTextTemplate, abilityContainer.transform);
-        //    ability.text = "SomeAction";//fx.GetType().ToString();
-        //    ability.gameObject.SetActive(true);
-        //}
     }
-
-    
 }

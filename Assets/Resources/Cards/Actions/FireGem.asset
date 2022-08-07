@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0db2d1d8adfd6ed4ba6b57e34be1f053, type: 3}
-  m_Name: Fireball
+  m_Name: FireGem
   m_EditorClassIdentifier: 
-  name: Fireball
+  name: Fire Gem
   description: 
   sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   isPermanent: 0
   instantEffect:
-  - effectType: 1
-    amount: 5
+  - effectType: 2
+    amount: 2
     targetsCreature: 0
     target: 0
-    Description: Gain {0} Damage
-  faction: 2
-  cost: 3
+    Description: Gain {0} Gold
+  faction: 4
+  cost: 2
   comboEffect: []
   sacrificeEffect: []

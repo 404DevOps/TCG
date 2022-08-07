@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 394d815cec4ab4e4d8f080d5a10df354, type: 3}
-  m_Name: Blob
+  m_Name: Slime
   m_EditorClassIdentifier: 
-  name: Blob
+  name: Slime
   description: 
   sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   isPermanent: 1

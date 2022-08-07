@@ -6,14 +6,26 @@ public class CardPlaceholder : MonoBehaviour
 {
     public CardBase card;
 
+    public bool instantiatedInHand;
+    public bool instantiatedInMarket;
+
     public GameObject creatureCardPrefab;
     public GameObject starterCardPrefab;
     public GameObject actionCardPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        GameObject newCard = new GameObject();
+        DisplayCard();
+    }
+    private void Start()
+    {
+        DisplayCard();
+    }
+
+    // Start is called before the first frame update
+    void DisplayCard()
+    {
+        GameObject newCard = null;
         if (card is CreatureCard)
         {
             newCard = creatureCardPrefab;
@@ -36,10 +48,17 @@ public class CardPlaceholder : MonoBehaviour
             display.card = (StarterCard)card;
             display.FillCard();
         }
-
-        Instantiate(newCard, transform.parent);
-        //Destroy Placeholder
-        Destroy(gameObject);
-
+        if (newCard != null)
+        {
+            
+            
+            var newObject = Instantiate(newCard, transform.parent);
+            if (instantiatedInHand)
+                newObject.AddComponent<Draggable>();
+            if (instantiatedInMarket)
+                newObject.AddComponent<Buyable>();
+                //Destroy Placeholder
+            Destroy(gameObject);
+        }
     }
 }

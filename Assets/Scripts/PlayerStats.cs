@@ -13,9 +13,9 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI txtHealth;
     public TextMeshProUGUI txtDamage;
 
-    int DamagePool;
-    int HealthPool;
-    int GoldPool;
+    public int DamagePool;
+    public int HealthPool;
+    public int GoldPool;
 
     // Start is called before the first frame update
     void Start()
