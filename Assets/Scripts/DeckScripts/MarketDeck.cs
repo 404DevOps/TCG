@@ -46,7 +46,7 @@ public class MarketDeck : DeckBase
         var card = DrawNextCard();
         var newCard = Instantiate(placeholderPrefab, marketField.transform);
         var ph = newCard.GetComponent<CardPlaceholder>();
-        ph.instantiatedInMarket = true;
+        ph.instantiatedIn = InstantiatedField.Market;
         ph.card = card;
 
         //Set New Market card to correct position

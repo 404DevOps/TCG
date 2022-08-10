@@ -13,14 +13,16 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI txtHealth;
     public TextMeshProUGUI txtDamage;
 
-    public int DamagePool;
-    public int HealthPool;
-    public int GoldPool;
+    public int DamagePool { get; private set; }
+    public int HealthPool { get; private set; }
+    public int GoldPool { get; private set; }
+
+    public DamageButton damageButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        txtName.text = owner == Owner.Player ? "Gimu" : "Enemy";
+        txtName.text = owner == Owner.Player ? "Player" : "Enemy";
         DamagePool = 0;
         HealthPool = 50;
         GoldPool = 0;
@@ -31,6 +33,13 @@ public class PlayerStats : MonoBehaviour
     {
         DamagePool += damageAmount;
         txtDamage.text = DamagePool.ToString();
+
+        if (DamagePool > 0 && !damageButton.isActive)
+            damageButton.SetActive();
+        else if(DamagePool <= 0 && damageButton.isActive)
+        {
+            damageButton.SetInactive();
+        }
     }
     public void AddGoldToPool(int goldAmount)
     {

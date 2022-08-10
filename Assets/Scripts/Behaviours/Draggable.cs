@@ -33,10 +33,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (dropped)
             return;
-        endPos = eventData.position;
+        endPos = GetWorldPoint(eventData.position);
         transform.position = Vector3.Lerp(transform.position, endPos, 10);
     }
 
+    Vector2 GetWorldPoint(Vector2 position)
+    {
+        return Camera.main.ScreenToWorldPoint(position);
+    }
     public void OnEndDrag(PointerEventData eventData)
     {
         if (dropped)
@@ -45,6 +49,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         if (dropTarget != null)
         {
             transform.SetParent(dropTarget);
+            
             
             //only calculate position if theres already a child there
             if (dropTarget.childCount > 0)
@@ -111,7 +116,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             else
             {
                 dropTarget = null;
-                Debug.Log("Field already full.");
+                GameManager.Instance.ShowMessage("Field already full.", Color.red);
             }
         }
         else 

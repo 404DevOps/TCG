@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CardBase : ScriptableObject
 {
+    public Owner owner;
     public new string name;
     public string description;
     public Sprite sprite;

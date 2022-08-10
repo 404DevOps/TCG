@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CardPlaceholder : MonoBehaviour
 {
     public CardBase card;
 
-    public bool instantiatedInHand;
-    public bool instantiatedInMarket;
+    public InstantiatedField instantiatedIn;
 
     public GameObject creatureCardPrefab;
     public GameObject starterCardPrefab;
@@ -53,10 +53,33 @@ public class CardPlaceholder : MonoBehaviour
             
             
             var newObject = Instantiate(newCard, transform.parent);
-            if (instantiatedInHand)
-                newObject.AddComponent<Draggable>();
-            if (instantiatedInMarket)
-                newObject.AddComponent<Buyable>();
+            //attach different behaviours based on where the card is instatiated
+            switch (instantiatedIn)
+            {
+                case InstantiatedField.PlayerField:
+                    if (card is CreatureCard)
+                    {
+                        newObject.AddComponent<Tapable>();
+                    }
+                    if (card is MarketCard)
+                    {
+                        var mC = (MarketCard)card;
+                        if (mC.sacrificeEffect.Any())
+                        {
+                            newObject.AddComponent<Sacrificable>();
+                        }
+                    }
+                    break;
+                case InstantiatedField.Hand: newObject.AddComponent<Draggable>(); break;
+                case InstantiatedField.Market: newObject.AddComponent<Buyable>(); break;
+                case InstantiatedField.EnemyField:
+                    if (card is CreatureCard)
+                    {
+                        newObject.AddComponent<Damageable>();
+                    }
+                    break;
+            }
+                
                 //Destroy Placeholder
             Destroy(gameObject);
         }

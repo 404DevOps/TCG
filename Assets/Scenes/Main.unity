@@ -2094,6 +2094,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 523226469}
   m_CullTransparentMesh: 1
+--- !u!1 &523777469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 523777471}
+  - component: {fileID: 523777470}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &523777470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523777469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 453079d1e2aafd645bd8c3d51ba33e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  messagePrefab: {fileID: 4862520016500657067, guid: f300bb31aea18dd4a8a7ff454823bc15, type: 3}
+  canvas: {fileID: 2035566824}
+  myPlayer: {fileID: 0}
+  enemyPlayer: {fileID: 0}
+--- !u!4 &523777471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523777469}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 975.97906, y: 584.36444, z: -2.4542036}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &532889258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3318,13 +3366,14 @@ GameObject:
   - component: {fileID: 914872687}
   - component: {fileID: 914872686}
   - component: {fileID: 914872685}
+  - component: {fileID: 914872688}
   m_Layer: 5
   m_Name: DealDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &914872684
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3367,10 +3416,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.7075472, g: 0, b: 0.06152583, a: 1}
+    m_HighlightedColor: {r: 0.70980394, g: 0, b: 0.0627451, a: 1}
+    m_PressedColor: {r: 0.6132076, g: 0.00867745, b: 0.062116694, a: 1}
+    m_SelectedColor: {r: 0.70980394, g: 0, b: 0.0627451, a: 1}
     m_DisabledColor: {r: 0.509434, g: 0, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -3428,6 +3477,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914872683}
   m_CullTransparentMesh: 1
+--- !u!114 &914872688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914872683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26cbfa089673bc94ca76258613f5adcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
 --- !u!1 &1111745944
 GameObject:
   m_ObjectHideFlags: 0
@@ -3441,7 +3503,7 @@ GameObject:
   - component: {fileID: 1111745947}
   - component: {fileID: 1111745946}
   m_Layer: 5
-  m_Name: DealDamage (1)
+  m_Name: EndTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4369,6 +4431,8 @@ MonoBehaviour:
   owner: 0
   deckVisual: {fileID: 900418570}
   discardPile: {fileID: 1581661888}
+  player: {fileID: 0}
+  card: {fileID: 0}
 --- !u!1 &1561026379
 GameObject:
   m_ObjectHideFlags: 0
@@ -4589,6 +4653,7 @@ GameObject:
   - component: {fileID: 1583324577}
   - component: {fileID: 1583324576}
   - component: {fileID: 1583324575}
+  - component: {fileID: 1583324579}
   m_Layer: 5
   m_Name: EnemyStats
   m_TagString: Untagged
@@ -4637,9 +4702,7 @@ MonoBehaviour:
   txtGold: {fileID: 1738342114}
   txtHealth: {fileID: 1891273636}
   txtDamage: {fileID: 532889260}
-  DamagePool: 0
-  HealthPool: 0
-  GoldPool: 0
+  damageButton: {fileID: 0}
 --- !u!114 &1583324576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4704,6 +4767,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583324573}
   m_CullTransparentMesh: 1
+--- !u!61 &1583324579
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583324573}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.1767044, y: 0.53015137}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 108.09305, y: 46.594048}
+  m_EdgeRadius: 0
 --- !u!1 &1630321367
 GameObject:
   m_ObjectHideFlags: 0
@@ -6424,8 +6513,8 @@ Canvas:
   m_GameObject: {fileID: 2035566824}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -6871,6 +6960,4 @@ MonoBehaviour:
   txtGold: {fileID: 523226471}
   txtHealth: {fileID: 178695110}
   txtDamage: {fileID: 600174959}
-  DamagePool: 0
-  HealthPool: 0
-  GoldPool: 0
+  damageButton: {fileID: 914872688}

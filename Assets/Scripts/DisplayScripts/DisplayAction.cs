@@ -28,6 +28,7 @@ public class DisplayAction : DisplayBase
         var factionColor = ColorHelper.GetFactionColor(aCard.faction);
         if (aCard.faction != Faction.Neutral)
         {
+            imgFaction.gameObject.SetActive(true);
             imgFaction.color = factionColor;
         }
         else 

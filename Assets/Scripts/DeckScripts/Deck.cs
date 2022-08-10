@@ -44,7 +44,7 @@ public class Deck : DeckBase//MonoBehaviour, IPointerClickHandler
             {
                 if (playerHand.transform.childCount > 6)
                 {
-                    Debug.Log("Hand is already full");
+                    GameManager.Instance.ShowMessage("Hand is already full", Color.red);
                 }
                 else 
                 {
@@ -63,8 +63,8 @@ public class Deck : DeckBase//MonoBehaviour, IPointerClickHandler
 
     public void ResetDeck()
     {
-        cards = discardPile.cards;
-        discardPile.cards = discardPile.EmptyPile();
+        //cards = discardPile.cards;
+        cards = discardPile.EmptyPile();
 
         ShuffleDeck();
 
@@ -74,7 +74,7 @@ public class Deck : DeckBase//MonoBehaviour, IPointerClickHandler
             ShowDeck();
         }
         else
-            Debug.Log("No Cards were reshuffleld");
+            GameManager.Instance.ShowMessage("No Cards to reshuffle into Deck.", Color.red);
     }
 
     //List<CardBase> ShuffleDeck(List<CardBase> cards)

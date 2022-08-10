@@ -31,4 +31,19 @@ public class EffectExecutor : MonoBehaviour
     {
         player.AddDamageToPool(amount);
     }
+
+    public void DealDamage(CreatureCard card, int amount)
+    { 
+        if(card.health <= amount)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public void DealDamageToPlayer()
+    {
+        enemy.AddHealthToPool(-player.DamagePool);
+        player.AddDamageToPool(-player.DamagePool);
+    }
+
 }

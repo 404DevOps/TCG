@@ -7,14 +7,20 @@ using UnityEngine.EventSystems;
 public class Buyable : MonoBehaviour, IPointerClickHandler
 {
     MarketCard card;
+
+    PlayerStats player;
+    DiscardPile discardPile;
+    MarketDeck marketDeck;
+
+    public void Start()
+    {
+        player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).FirstOrDefault();
+        discardPile = FindObjectsOfType<DiscardPile>().Where(m => m.owner == Owner.Player).FirstOrDefault();
+        marketDeck = FindObjectOfType<MarketDeck>();
+        card = (MarketCard)GetComponent<DisplayBase>().card;
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
-        card = (MarketCard)GetComponent<DisplayBase>().card;
-
-        var player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).FirstOrDefault();
-        var discardPile = FindObjectsOfType<DiscardPile>().Where(m => m.owner == Owner.Player).FirstOrDefault();
-        var marketDeck = FindObjectOfType<MarketDeck>();
-
         if (player.GoldPool >= card.cost)
         {
             player.AddGoldToPool(-card.cost);
@@ -27,7 +33,7 @@ public class Buyable : MonoBehaviour, IPointerClickHandler
         }
         else 
         {
-            Debug.Log("Not enough Money");
+            GameManager.Instance.ShowMessage("Not enough Money", Color.red);
         }
     }
 }

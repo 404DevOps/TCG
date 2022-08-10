@@ -21,7 +21,7 @@ public class Hand : MonoBehaviour
         var newCard = Instantiate(cardPlaceholder, canvas.transform);
         var placeHolder = newCard.GetComponent<CardPlaceholder>();
         placeHolder.card = card;
-        placeHolder.instantiatedInHand = true;
+        placeHolder.instantiatedIn = InstantiatedField.Hand;
 
         newCard.transform.SetParent(transform);
         newCard.transform.SetAsLastSibling();

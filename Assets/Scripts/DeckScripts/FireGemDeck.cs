@@ -7,12 +7,17 @@ using UnityEngine.EventSystems;
 public class FireGemDeck : DeckBase
 {
     public DiscardPile discardPile;
+    public PlayerStats player;
+    public MarketCard card;
 
+    public override void Start()
+    {
+        base.Start();
+        player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).First();
+        card = (MarketCard)DrawNextCard();
+    }
     public override void OnPointerClick(PointerEventData eventData)
     {
-        var player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).First();
-        var card = (MarketCard)DrawNextCard();
-
         if (player.GoldPool >= card.cost)
         {
             player.AddGoldToPool(-card.cost);
@@ -21,7 +26,7 @@ public class FireGemDeck : DeckBase
         }
         else 
         {
-            Debug.Log("Not enough money");
+            GameManager.Instance.ShowMessage("Not enough Money.", Color.red);
         }
     }
 
