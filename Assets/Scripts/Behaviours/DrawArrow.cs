@@ -16,20 +16,28 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public bool drawing;
 
     private LineRenderer lineRenderer;
+    public int speed = 2;
+    public GameObject arrowHead;
 
     public event EventHandler<TargetSelectedEventArgs> TargetSelected;
 
     // Start is called before the first frame update
     void Start()
     {
+        
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.startWidth = 0.5f;
         lineRenderer.endWidth = 0.5f;
         lineRenderer.enabled = false;
         lineRenderer.startColor = Color.red;
         lineRenderer.endColor = Color.red;
-        lineRenderer.material = new Material(Shader.Find("Unlit/Texture"));
-        lineRenderer.material.color = Color.red;
+        lineRenderer.material = Resources.Load<Material>("Materials/ArrowMaterial");
+        //lineRenderer.material.color = Color.red;
+    }
+
+    void Update()
+    {
+        lineRenderer.material.SetTextureOffset("_MainTex", Vector2.left * speed * Time.time);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -42,11 +50,11 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
             var positions = dist / 1.2f;
 
             lineRenderer.enabled = true;
-            lineRenderer.positionCount = 2;// Mathf.CeilToInt(positions);
+            lineRenderer.positionCount = 2;
             lineRenderer.SetPosition(0, startPosition);
             lineRenderer.SetPosition(lineRenderer.positionCount-1, currentPosition);
             lineRenderer.textureMode = LineTextureMode.Tile;
-            lineRenderer.material.SetTextureOffset("_MainTex", Vector2.right * Time.time);
+            arrowHead.SetActive(true);
         } 
     }
 
@@ -62,6 +70,7 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     }
     public void OnEndDrag(PointerEventData eventData)
     {
+        arrowHead.SetActive(false);
         drawing = false;
         lineRenderer.enabled = false;
         lineRenderer.positionCount = 0;

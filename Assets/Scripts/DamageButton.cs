@@ -10,6 +10,7 @@ public class DamageButton : MonoBehaviour
     Button button;
     PlayerStats player;
     public bool isActive;
+    public GameObject redArrow;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +23,7 @@ public class DamageButton : MonoBehaviour
         isActive = true;
         var arrow = gameObject.AddComponent<DrawArrow>();
         arrow.actionType = ActionType.Damage;
+        arrow.arrowHead = redArrow;
         button.interactable = true;
         arrow.TargetSelected += DealDamage;
     }
