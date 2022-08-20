@@ -78,6 +78,7 @@ public class CardPlaceholder : MonoBehaviour
                         newObject.AddComponent<Damageable>();
                     }
                     break;
+                case InstantiatedField.DiscardPile: Destroy(newObject.GetComponent<Draggable>()); break;
             }
                 
                 //Destroy Placeholder

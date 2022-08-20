@@ -21,8 +21,9 @@ public class DiscardPile : MonoBehaviour
         cards.Add(card);
 
         var newCard = Instantiate(cardPlaceholderPrefab, transform);
-        var cardDisplay = newCard.GetComponent<CardPlaceholder>();
-        cardDisplay.card = card;
+        var placeholder = newCard.GetComponent<CardPlaceholder>();
+        placeholder.instantiatedIn = InstantiatedField.DiscardPile;
+        placeholder.card = card;
     }
     public List<CardBase> EmptyPile()
     {
