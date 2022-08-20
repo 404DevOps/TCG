@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,12 +6,16 @@ using UnityEngine;
 
 public class CardBase : ScriptableObject
 {
+    [Header("Base Info")]
     public Owner owner;
+    [ReadOnly] 
+    public string Id = Guid.NewGuid().ToString();
+
     public new string name;
-    public string description;
     public Sprite sprite;
     public bool isPermanent;
 
+    [Header("Card Effects")]
     public List<CardEffectBase> instantEffect;
 
     //public void Discard()
