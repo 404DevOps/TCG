@@ -103,7 +103,7 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
                 }
             }
            
-            if (element.gameObject.GetComponent<DisplayCreature>()?.card?.owner == Owner.Enemy)
+            if (element.gameObject.GetComponent<DisplayCard>()?.card?.owner == Owner.Enemy)
             {
                 target = element.gameObject;
                 return true;

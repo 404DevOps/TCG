@@ -5,84 +5,56 @@ using UnityEngine;
 
 public class CardPlaceholder : MonoBehaviour
 {
-    public CardBase card;
+    public Card card;
 
     public InstantiatedField instantiatedIn;
 
-    public GameObject creatureCardPrefab;
-    public GameObject starterCardPrefab;
-    public GameObject actionCardPrefab;
+    public GameObject cardPrefab;
 
     private void OnEnable()
     {
-        DisplayCard();
+        if(card != null)
+            DisplayCard();
     }
     private void Start()
     {
-        DisplayCard();
+        if (card != null)
+            DisplayCard();
     }
 
-    // Start is called before the first frame update
-    void DisplayCard()
+    public void DisplayCard()
     {
-        GameObject newCard = null;
-        if (card is CreatureCard)
-        {
-            newCard = creatureCardPrefab;
-            var display = newCard.GetComponent<DisplayCreature>();
-            display.card = (CreatureCard)card;
-            display.FillCard();
+        var newObject = Instantiate(cardPrefab, transform.parent);
+        var display = newObject.GetComponent<DisplayCard>();
+        display.card = card;
+        display.FillCard();
 
-        }
-        if (card is ActionCard)
+        //attach different behaviours based on where the card is instatiated
+        switch (instantiatedIn)
         {
-            newCard = actionCardPrefab;
-            var display = newCard.GetComponent<DisplayAction>();
-            display.card = (ActionCard)card;
-            display.FillCard();
+            case InstantiatedField.PlayerField:
+                if (card.tapEffect.Any())
+                {
+                    newObject.AddComponent<Tapable>();
+                }
+                if (card.sacrificeEffect.Any())
+                {
+                    newObject.AddComponent<Sacrificable>();
+                }
+
+                break;
+            case InstantiatedField.Hand: newObject.AddComponent<Draggable>(); break;
+            case InstantiatedField.Market: newObject.AddComponent<Buyable>(); break;
+            case InstantiatedField.EnemyField:
+                if (card.cardType == CardType.Creature)
+                {
+                    newObject.AddComponent<Damageable>();
+                }
+                break;
+            case InstantiatedField.DiscardPile: Destroy(newObject.GetComponent<Draggable>()); break;
         }
-        if (card is StarterCard)
-        {
-            newCard = starterCardPrefab;
-            var display = newCard.GetComponent<DisplayStarter>();
-            display.card = (StarterCard)card;
-            display.FillCard();
-        }
-        if (newCard != null)
-        {
-            
-            
-            var newObject = Instantiate(newCard, transform.parent);
-            //attach different behaviours based on where the card is instatiated
-            switch (instantiatedIn)
-            {
-                case InstantiatedField.PlayerField:
-                    if (card is CreatureCard)
-                    {
-                        newObject.AddComponent<Tapable>();
-                    }
-                    if (card is MarketCard)
-                    {
-                        var mC = (MarketCard)card;
-                        if (mC.sacrificeEffect.Any())
-                        {
-                            newObject.AddComponent<Sacrificable>();
-                        }
-                    }
-                    break;
-                case InstantiatedField.Hand: newObject.AddComponent<Draggable>(); break;
-                case InstantiatedField.Market: newObject.AddComponent<Buyable>(); break;
-                case InstantiatedField.EnemyField:
-                    if (card is CreatureCard)
-                    {
-                        newObject.AddComponent<Damageable>();
-                    }
-                    break;
-                case InstantiatedField.DiscardPile: Destroy(newObject.GetComponent<Draggable>()); break;
-            }
-                
-                //Destroy Placeholder
-            Destroy(gameObject);
-        }
+
+        //Destroy Placeholder
+        Destroy(gameObject);
     }
 }

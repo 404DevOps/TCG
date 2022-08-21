@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Damageable : MonoBehaviour
 {
-    public CreatureCard card;
+    public Card card;
     public DiscardPile discardPile;
 
     private void Start()
     {
-        card = (CreatureCard)GetComponent<DisplayBase>().card;
+        card = (Card)GetComponent<DisplayCard>().card;
     }
 
     public void ReceiveDamage(int amount)

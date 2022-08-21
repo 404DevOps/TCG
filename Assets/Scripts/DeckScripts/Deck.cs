@@ -18,11 +18,11 @@ public class Deck : DeckBase//MonoBehaviour, IPointerClickHandler
 
     public override void InitializeDeck()
     {
-        var listCards = new List<CardBase>();
-        CardBase dagger = Resources.Load<StarterCard>("Cards/Starters/Dagger");
-        CardBase sword = Resources.Load<StarterCard>("Cards/Starters/Sword");
-        CardBase gold = Resources.Load<StarterCard>("Cards/Starters/Gold");
-        CardBase ruby = Resources.Load<StarterCard>("Cards/Starters/Ruby");
+        var listCards = new List<Card>();
+        Card dagger = Resources.Load<Card>("Cards/Starters/Dagger");
+        Card sword = Resources.Load<Card>("Cards/Starters/Sword");
+        Card gold = Resources.Load<Card>("Cards/Starters/Gold");
+        Card ruby = Resources.Load<Card>("Cards/Starters/Ruby");
 
         listCards.Add(dagger);
         listCards.Add(sword);

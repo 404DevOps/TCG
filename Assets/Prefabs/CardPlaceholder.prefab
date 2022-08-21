@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5778522366317640977}
   - component: {fileID: 694622588645792468}
   - component: {fileID: 1245372147169446218}
-  - component: {fileID: -5085596550799391281}
   m_Layer: 6
   m_Name: CardPlaceholder
   m_TagString: Untagged
@@ -92,27 +91,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   card: {fileID: 0}
   instantiatedIn: 0
-  creatureCardPrefab: {fileID: 5785546367372110271, guid: 9b46338910dd6b544930ac201efb7df8, type: 3}
-  starterCardPrefab: {fileID: 5785546367372110271, guid: 5751a19ab51fb85458405f13d438e89f, type: 3}
-  actionCardPrefab: {fileID: 5785546367372110271, guid: 4935884ba7d92d546b48665647e34c37, type: 3}
---- !u!223 &-5085596550799391281
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5785546367372110271}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
+  cardPrefab: {fileID: 5785546367372110271, guid: 9b46338910dd6b544930ac201efb7df8, type: 3}

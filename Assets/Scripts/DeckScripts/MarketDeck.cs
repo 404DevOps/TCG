@@ -21,12 +21,12 @@ public class MarketDeck : DeckBase
 
     public override void InitializeDeck()
     {
-        var slime = Resources.Load<CreatureCard>("Cards/Creatures/Slime");
-        var mage = Resources.Load<CreatureCard>("Cards/Creatures/Mage");
-        var vamp = Resources.Load<CreatureCard>("Cards/Creatures/Vampire");
-        var fireball = Resources.Load<ActionCard>("Cards/Actions/Fireball");
-        var heal = Resources.Load<ActionCard>("Cards/Actions/Heal");
-        var icebolt = Resources.Load<ActionCard>("Cards/Actions/Icebolt");
+        var slime = Resources.Load<Card>("Cards/Creatures/Slime");
+        var mage = Resources.Load<Card>("Cards/Creatures/Mage");
+        var vamp = Resources.Load<Card>("Cards/Creatures/Vampire");
+        var fireball = Resources.Load<Card>("Cards/Actions/Fireball");
+        var heal = Resources.Load<Card>("Cards/Actions/Heal");
+        var icebolt = Resources.Load<Card>("Cards/Actions/Icebolt");
         for (int i = 0; i < 3; i++)
         {
             cards.Add(slime);
@@ -48,6 +48,7 @@ public class MarketDeck : DeckBase
         var ph = newCard.GetComponent<CardPlaceholder>();
         ph.instantiatedIn = InstantiatedField.Market;
         ph.card = card;
+        ph.DisplayCard();
 
         //Set New Market card to correct position
         newCard.transform.SetSiblingIndex(index);

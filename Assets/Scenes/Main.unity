@@ -3649,7 +3649,7 @@ RectTransform:
   m_Children:
   - {fileID: 120689006}
   m_Father: {fileID: 2035566825}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3816,7 +3816,7 @@ RectTransform:
   m_Children:
   - {fileID: 2046596703}
   m_Father: {fileID: 2035566825}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4011,7 +4011,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2035566825}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 1.53}
 --- !u!114 &1150694531
 MonoBehaviour:
@@ -4321,7 +4321,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2035566825}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -4417,7 +4417,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1345753394}
-  - component: {fileID: 1345753393}
+  - component: {fileID: 1345753396}
   - component: {fileID: 1345753392}
   - component: {fileID: 1345753395}
   m_Layer: 5
@@ -4451,32 +4451,6 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
---- !u!114 &1345753393
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1345753391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad54cc76f6f2e7c46b26c1523593e377, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  runInBackground: 1
-  autoStartServerBuild: 1
-  serverTickRate: 30
-  offlineScene: Assets/Scenes/Main.unity
-  onlineScene: Assets/Scenes/Main.unity
-  transport: {fileID: 1345753392}
-  networkAddress: localhost
-  maxConnections: 100
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs: []
 --- !u!4 &1345753394
 Transform:
   m_ObjectHideFlags: 0
@@ -4506,6 +4480,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 1650
   offsetY: 0
+--- !u!114 &1345753396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345753391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  runInBackground: 1
+  autoStartServerBuild: 1
+  serverTickRate: 30
+  offlineScene: Assets/Scenes/Main.unity
+  onlineScene: Assets/Scenes/Main.unity
+  transport: {fileID: 1345753392}
+  networkAddress: localhost
+  maxConnections: 3
+  authenticator: {fileID: 0}
+  playerPrefab: {fileID: 0}
+  autoCreatePlayer: 1
+  playerSpawnMethod: 0
+  spawnPrefabs: []
 --- !u!1 &1396430233
 GameObject:
   m_ObjectHideFlags: 0
@@ -5236,6 +5236,7 @@ GameObject:
   - component: {fileID: 1583324576}
   - component: {fileID: 1583324575}
   - component: {fileID: 1583324579}
+  - component: {fileID: 1583324580}
   m_Layer: 5
   m_Name: EnemyStats
   m_TagString: Untagged
@@ -5279,7 +5280,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2414fadf3918ef84999e99c10ce9b524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   owner: 1
+  Identity: {fileID: 1583324580}
   txtName: {fileID: 36727250}
   txtGold: {fileID: 1738342114}
   txtHealth: {fileID: 1891273636}
@@ -5375,6 +5379,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 108.09305, y: 46.594048}
   m_EdgeRadius: 0
+--- !u!114 &1583324580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583324573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 3927255884
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &1586393504
 GameObject:
   m_ObjectHideFlags: 0
@@ -6373,7 +6394,7 @@ RectTransform:
   - {fileID: 2129182063}
   - {fileID: 1583324574}
   m_Father: {fileID: 2035566825}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7147,11 +7168,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1150694530}
   - {fileID: 1857246231}
   - {fileID: 914872684}
   - {fileID: 1111745945}
   - {fileID: 1298139181}
+  - {fileID: 1150694530}
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7544,6 +7565,7 @@ GameObject:
   - component: {fileID: 2129182065}
   - component: {fileID: 2129182064}
   - component: {fileID: 2129182067}
+  - component: {fileID: 2129182068}
   m_Layer: 5
   m_Name: PlayerStats
   m_TagString: Untagged
@@ -7651,9 +7673,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2414fadf3918ef84999e99c10ce9b524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   owner: 0
+  Identity: {fileID: 2129182068}
   txtName: {fileID: 847747397}
   txtGold: {fileID: 523226471}
   txtHealth: {fileID: 178695110}
   txtDamage: {fileID: 600174959}
   damageButton: {fileID: 914872688}
+--- !u!114 &2129182068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129182062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 2298623595
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0

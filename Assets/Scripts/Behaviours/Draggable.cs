@@ -9,7 +9,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     Vector3 startPos;
     Vector3 endPos;
 
-    CardBase card;
+    Card card;
 
     bool dropped = false;
 
@@ -17,7 +17,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     // Start is called before the first frame update
     void Start()
     {
-        card = GetComponent<DisplayBase>().card;
+        card = GetComponent<DisplayCard>().card;
         startPos = transform.position;
     }
 

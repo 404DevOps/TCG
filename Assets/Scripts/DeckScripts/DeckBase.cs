@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class DeckBase : MonoBehaviour, IPointerClickHandler
 {
-    public List<CardBase> cards;
+    public List<Card> cards;
     public Owner owner;
     public GameObject deckVisual;
 
@@ -32,7 +32,7 @@ public class DeckBase : MonoBehaviour, IPointerClickHandler
         if(!cards.Any())
             Debug.Log("Cant shuffle, no cards in this Deck.");
 
-        var listShuffled = new List<CardBase>();
+        var listShuffled = new List<Card>();
         var iterations = cards.Count;
         for (int i = 0; i < iterations; i++)
         {
@@ -49,7 +49,7 @@ public class DeckBase : MonoBehaviour, IPointerClickHandler
         cards =  listShuffled;
     }
 
-    public CardBase DrawNextCard()
+    public Card DrawNextCard()
     {
         if (cards.Any())
         {

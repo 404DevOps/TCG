@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Mirror;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : NetworkBehaviour
 {
     public Owner owner;
-    public TextMeshProUGUI txtName;
 
+    public NetworkIdentity Identity;
+    //Display PlayerStats
+    public TextMeshProUGUI txtName;
     public TextMeshProUGUI txtGold;
     public TextMeshProUGUI txtHealth;
     public TextMeshProUGUI txtDamage;

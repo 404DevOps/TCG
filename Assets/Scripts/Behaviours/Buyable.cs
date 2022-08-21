@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Buyable : MonoBehaviour, IPointerClickHandler
 {
-    MarketCard card;
+    Card card;
 
     PlayerStats player;
     DiscardPile discardPile;
@@ -17,7 +17,7 @@ public class Buyable : MonoBehaviour, IPointerClickHandler
         player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).FirstOrDefault();
         discardPile = FindObjectsOfType<DiscardPile>().Where(m => m.owner == Owner.Player).FirstOrDefault();
         marketDeck = FindObjectOfType<MarketDeck>();
-        card = (MarketCard)GetComponent<DisplayBase>().card;
+        card = GetComponent<DisplayCard>().card;
     }
     public void OnPointerClick(PointerEventData eventData)
     {

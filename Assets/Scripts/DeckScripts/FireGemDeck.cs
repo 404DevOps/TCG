@@ -8,13 +8,13 @@ public class FireGemDeck : DeckBase
 {
     public DiscardPile discardPile;
     public PlayerStats player;
-    public MarketCard card;
+    public Card card;
 
     public override void Start()
     {
         base.Start();
         player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).First();
-        card = (MarketCard)DrawNextCard();
+        card = DrawNextCard();
     }
     public override void OnPointerClick(PointerEventData eventData)
     {
@@ -32,8 +32,8 @@ public class FireGemDeck : DeckBase
 
     public override void InitializeDeck()
     {
-        cards = new List<CardBase>();
-        CardBase firegem = Resources.Load<ActionCard>("Cards/Actions/FireGem");
+        cards = new List<Card>();
+        Card firegem = Resources.Load<Card>("Cards/Actions/FireGem");
         for (int i = 0; i <= 16; i++)
         {
             cards.Add(firegem);

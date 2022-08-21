@@ -5,16 +5,16 @@ using UnityEngine;
 public class DiscardPile : MonoBehaviour
 {
     public Owner owner;
-    public List<CardBase> cards;
+    public List<Card> cards;
 
     public GameObject cardPlaceholderPrefab;
     // Start is called before the first frame update
     private void Start()
     {
-        cards = new List<CardBase>();
+        cards = new List<Card>();
     }
 
-    public void AddCardToPile(CardBase card)
+    public void AddCardToPile(Card card)
     {
         DestroyChildObjects();
 
@@ -25,13 +25,13 @@ public class DiscardPile : MonoBehaviour
         placeholder.instantiatedIn = InstantiatedField.DiscardPile;
         placeholder.card = card;
     }
-    public List<CardBase> EmptyPile()
+    public List<Card> EmptyPile()
     {
         //destroy placeholder
         DestroyChildObjects();
 
         var pile = cards;
-        cards = new List<CardBase>();
+        cards = new List<Card>();
         return pile;
         
     }

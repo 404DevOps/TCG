@@ -32,7 +32,7 @@ public class EffectExecutor : MonoBehaviour
         player.AddDamageToPool(amount);
     }
 
-    public void DealDamage(CreatureCard card, int amount)
+    public void DealDamage(Card card, int amount)
     { 
         if(card.health <= amount)
         {
