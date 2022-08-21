@@ -2275,6 +2275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 523777471}
   - component: {fileID: 523777470}
+  - component: {fileID: 523777472}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2294,10 +2295,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 453079d1e2aafd645bd8c3d51ba33e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   messagePrefab: {fileID: 4862520016500657067, guid: f300bb31aea18dd4a8a7ff454823bc15, type: 3}
   canvas: {fileID: 2035566824}
   myPlayer: {fileID: 0}
   enemyPlayer: {fileID: 0}
+  players: []
+  cardPrefab: {fileID: 0}
 --- !u!4 &523777471
 Transform:
   m_ObjectHideFlags: 0
@@ -2313,6 +2318,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &523777472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523777469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 3207684379
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &532889258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3164,6 +3186,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1531301753}
     m_Modifications:
+    - target: {fileID: -8544463823282053690, guid: 58378a75a62b4124e83e75358348d80d, type: 3}
+      propertyPath: sceneId
+      value: 479177390
+      objectReference: {fileID: 0}
     - target: {fileID: 1245372147169446218, guid: 58378a75a62b4124e83e75358348d80d, type: 3}
       propertyPath: card
       value: 
@@ -4502,10 +4528,15 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 3
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 5179526957958263934, guid: 77dba42bde863c44bb582da86bd72a6a, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1396430233
 GameObject:
   m_ObjectHideFlags: 0
@@ -5282,13 +5313,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  owner: 1
-  Identity: {fileID: 1583324580}
+  Owner: 0
+  playerData: {fileID: 0}
+  Identity: {fileID: 0}
   txtName: {fileID: 36727250}
   txtGold: {fileID: 1738342114}
   txtHealth: {fileID: 1891273636}
   txtDamage: {fileID: 532889260}
-  damageButton: {fileID: 0}
+  damageButton: {fileID: 914872688}
 --- !u!114 &1583324576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7675,8 +7707,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  owner: 0
-  Identity: {fileID: 2129182068}
+  Owner: 0
+  playerData: {fileID: 0}
+  Identity: {fileID: 0}
   txtName: {fileID: 847747397}
   txtGold: {fileID: 523226471}
   txtHealth: {fileID: 178695110}

@@ -96,7 +96,7 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
             if (actionType == ActionType.Damage)
             {
                 Debug.Log(element.gameObject.name);
-                if (element.gameObject.GetComponent<PlayerStats>()?.owner == Owner.Enemy)
+                if (element.gameObject.GetComponent<DisplayPlayerStats>()?.playerData.Owner == Owner.Enemy)
                 {
                     target = element.gameObject;
                     return true;

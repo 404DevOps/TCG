@@ -7,18 +7,18 @@ using UnityEngine.EventSystems;
 public class FireGemDeck : DeckBase
 {
     public DiscardPile discardPile;
-    public PlayerStats player;
+    public DisplayPlayerStats player;
     public Card card;
 
     public override void Start()
     {
         base.Start();
-        player = FindObjectsOfType<PlayerStats>().Where(m => m.owner == Owner.Player).First();
+        player = FindObjectsOfType<DisplayPlayerStats>()?.Where(m => m.playerData.Owner == Owner.Player)?.First();
         card = DrawNextCard();
     }
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (player.GoldPool >= card.cost)
+        if (player.playerData.GoldPool >= card.cost)
         {
             player.AddGoldToPool(-card.cost);
             //put in player discard pile

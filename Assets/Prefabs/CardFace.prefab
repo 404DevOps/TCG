@@ -400,7 +400,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Dagger
+  m_text: Sword
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1060,7 +1060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c4dbd591b9f044b977283f51f5e4ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 11400000, guid: 70fc8b1948a07414f8a35a2a00ae2e3c, type: 2}
+  card: {fileID: 11400000, guid: add97041416047d41a38d6d9994b16f6, type: 2}
   txtHealth: {fileID: 1764345731650431715}
   imgTaunt: {fileID: 7990195441031049555}
   txtCost: {fileID: 9149344812291244527}

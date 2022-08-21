@@ -7,8 +7,8 @@ public class EffectExecutor : MonoBehaviour
 {
     public static EffectExecutor Instance;
 
-    public PlayerStats player;
-    public PlayerStats enemy;
+    public DisplayPlayerStats player;
+    public DisplayPlayerStats enemy;
 
     private void Start()
     {
@@ -42,8 +42,8 @@ public class EffectExecutor : MonoBehaviour
 
     public void DealDamageToPlayer()
     {
-        enemy.AddHealthToPool(-player.DamagePool);
-        player.AddDamageToPool(-player.DamagePool);
+        enemy.AddHealthToPool(-player.playerData.DamagePool);
+        player.AddDamageToPool(-player.playerData.DamagePool);
     }
 
 }
