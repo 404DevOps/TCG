@@ -1,41 +1,45 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class DiscardPile : MonoBehaviour
+public class DiscardPile : NetworkBehaviour
 {
     public Owner owner;
-    public List<Card> cards;
+    public readonly SyncList<string> cards = new SyncList<string>();
 
     public GameObject cardPlaceholderPrefab;
-    // Start is called before the first frame update
-    private void Start()
-    {
-        cards = new List<Card>();
-    }
 
-    public void AddCardToPile(Card card)
+    [ClientRpc]
+    public void AddCardToPile(string cardId)
     {
+        //Destroy Current TopCard
         DestroyChildObjects();
 
-        cards.Add(card);
+        cards.Add(cardId);
+
 
         var newCard = Instantiate(cardPlaceholderPrefab, transform);
         var placeholder = newCard.GetComponent<CardPlaceholder>();
         placeholder.instantiatedIn = InstantiatedField.DiscardPile;
-        placeholder.card = card;
+
+        //get card from game manager list
+        placeholder.card = GameManager.Instance.allCards.Where(c => c.Id == cardId).FirstOrDefault();
     }
-    public List<Card> EmptyPile()
+
+    [Server]
+    public List<string> EmptyPile()
     {
         //destroy placeholder
         DestroyChildObjects();
 
-        var pile = cards;
-        cards = new List<Card>();
+        var pile = cards.ToList();
+        cards.RemoveAll(id => id != null);
         return pile;
-        
     }
 
+    [Client]
     void DestroyChildObjects()
     {
         //destroy placeholder and instantiate new one

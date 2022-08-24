@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ public class Card : ScriptableObject
     public int cost;
 
     [Header("Creature Cards")]
-    public uint health;
+    public int health;
     public bool hasTaunt;
 
     [Header("Card Effects")]
@@ -34,7 +35,7 @@ public class Card : ScriptableObject
     public List<CardEffectBase> sacrificeEffect;
     public List<CardEffectBase> tapEffect;
 
-
+    [Server]
     public void ApplyInstantEffects()
     {
         foreach (var fx in instantEffect)

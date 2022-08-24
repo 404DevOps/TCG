@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum InstantiatedField
 {
-    Hand,
+    PlayerHand,
+    EnemyHand,
     Market,
     DiscardPile,
     PlayerField,

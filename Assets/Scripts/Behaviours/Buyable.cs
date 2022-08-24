@@ -8,26 +8,26 @@ public class Buyable : MonoBehaviour, IPointerClickHandler
 {
     Card card;
 
-    DisplayPlayerStats player;
+    Player player;
     DiscardPile discardPile;
     MarketDeck marketDeck;
 
     public void Start()
     {
-        player = FindObjectsOfType<DisplayPlayerStats>().Where(m => m.playerData.Owner == Owner.Player).FirstOrDefault();
+        player = FindObjectsOfType<Player>().Where(m => m.isLocalPlayer).FirstOrDefault();
         discardPile = FindObjectsOfType<DiscardPile>().Where(m => m.owner == Owner.Player).FirstOrDefault();
         marketDeck = FindObjectOfType<MarketDeck>();
         card = GetComponent<DisplayCard>().card;
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (player.playerData.GoldPool >= card.cost)
+        if (player.GoldPool >= card.cost)
         {
-            player.AddGoldToPool(-card.cost);
+            player.AddToGoldPool(-card.cost);
             //put in player discard pile
-            discardPile.AddCardToPile(card);
+            discardPile.AddCardToPile(card.Id);
             //get new card from market deck and put in market field
-            marketDeck.AddCardToMarket(transform.GetSiblingIndex());
+            marketDeck.AddCardToMarketField(transform.GetSiblingIndex());
             //destroy market card
             Destroy(gameObject);
         }

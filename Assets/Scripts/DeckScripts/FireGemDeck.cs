@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,20 +8,20 @@ using UnityEngine.EventSystems;
 public class FireGemDeck : DeckBase
 {
     public DiscardPile discardPile;
-    public DisplayPlayerStats player;
-    public Card card;
+    public Player player;
+    public string card;
 
-    public override void Start()
-    {
-        base.Start();
-        player = FindObjectsOfType<DisplayPlayerStats>()?.Where(m => m.playerData.Owner == Owner.Player)?.First();
-        card = DrawNextCard();
-    }
+    public Card fireGemCard;
+
+    [Client]
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (player.playerData.GoldPool >= card.cost)
+        if(player == null)
+            player = FindObjectsOfType<Player>()?.Where(m => m.isLocalPlayer)?.First();
+        //send command to server to check if possible to buy && add
+        if (player.GoldPool >= fireGemCard.cost)
         {
-            player.AddGoldToPool(-card.cost);
+            player.AddToGoldPool(-fireGemCard.cost);
             //put in player discard pile
             discardPile.AddCardToPile(card);
         }
@@ -30,13 +31,16 @@ public class FireGemDeck : DeckBase
         }
     }
 
+    [Server]
     public override void InitializeDeck()
     {
-        cards = new List<Card>();
-        Card firegem = Resources.Load<Card>("Cards/Actions/FireGem");
+        
+        card = DrawNextCard();
+        fireGemCard = GameManager.Instance.allCards.Where(c => c.cardType == CardType.FireGem).FirstOrDefault();
+
         for (int i = 0; i <= 16; i++)
         {
-            cards.Add(firegem);
+            cards.Add(fireGemCard.Id);
         }
     }
 }

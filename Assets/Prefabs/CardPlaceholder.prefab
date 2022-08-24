@@ -93,6 +93,7 @@ MonoBehaviour:
   card: {fileID: 0}
   instantiatedIn: 0
   cardPrefab: {fileID: 5785546367372110271, guid: 9b46338910dd6b544930ac201efb7df8, type: 3}
+  cardBackPrefab: {fileID: 8590036203219368470, guid: 4d7c8d87268d7ae49928ab7dbe8f7e43, type: 3}
 --- !u!114 &-8544463823282053690
 MonoBehaviour:
   m_ObjectHideFlags: 0

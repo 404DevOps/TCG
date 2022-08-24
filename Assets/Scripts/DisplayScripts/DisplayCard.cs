@@ -55,6 +55,8 @@ public class DisplayCard : MonoBehaviour
         {
             txtHealth.text = card.health.ToString();
             imgTaunt.color = new Color(imgTaunt.color.r, imgTaunt.color.g, imgTaunt.color.b, card.hasTaunt ? 255 : 0);
+            txtHealth.enabled = true;
+            imgTaunt.enabled = true;
         }
         else 
         {

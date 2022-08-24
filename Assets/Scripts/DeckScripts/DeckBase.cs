@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,15 +7,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
-public class DeckBase : MonoBehaviour, IPointerClickHandler
+public class DeckBase : NetworkBehaviour, IPointerClickHandler
 {
-    public List<Card> cards;
+    //only store guid in cardlist
+    public readonly SyncList<string> cards = new SyncList<string>();
     public Owner owner;
     public GameObject deckVisual;
 
     public virtual void Start()
     {
-        InitializeDeck();
+        //InitializeDeck();
     }
 
     public  virtual void InitializeDeck()
@@ -27,29 +29,8 @@ public class DeckBase : MonoBehaviour, IPointerClickHandler
        
     }
 
-    public void ShuffleDeck()
-    {
-        if(!cards.Any())
-            Debug.Log("Cant shuffle, no cards in this Deck.");
-
-        var listShuffled = new List<Card>();
-        var iterations = cards.Count;
-        for (int i = 0; i < iterations; i++)
-        {
-            var randomIndex = Random.Range(0, cards.Count);
-            
-            //pick random card and remove it from list
-            var pickedCard = cards[randomIndex];
-            cards.RemoveAt(randomIndex);
-
-            //add random card to new list
-            listShuffled.Add(pickedCard);
-        }
-
-        cards =  listShuffled;
-    }
-
-    public Card DrawNextCard()
+    [Server]
+    public string DrawNextCard()
     {
         if (cards.Any())
         {
@@ -65,11 +46,14 @@ public class DeckBase : MonoBehaviour, IPointerClickHandler
             return null;
         }
     }
+
+    [ClientRpc]
     public void HideDeck()
     {
         deckVisual.SetActive(false);
     }
 
+    [ClientRpc]
     public void ShowDeck()
     {
         deckVisual.SetActive(true);

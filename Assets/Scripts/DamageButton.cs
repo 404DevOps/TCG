@@ -8,14 +8,14 @@ using UnityEngine.UI;
 public class DamageButton : MonoBehaviour
 {
     Button button;
-    DisplayPlayerStats player;
+    Player player;
     public bool isActive;
     public GameObject redArrow;
     // Start is called before the first frame update
     void Start()
     {
         button = GetComponent<Button>();
-        player = FindObjectsOfType<DisplayPlayerStats>().Where(p => p.playerData.Owner == Owner.Player).FirstOrDefault();
+        player = FindObjectsOfType<Player>().Where(p => p.Owner == Owner.Player).FirstOrDefault();
     }
 
     public void SetActive()

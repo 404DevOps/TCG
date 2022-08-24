@@ -1,3 +1,4 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,69 +7,65 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
-public class Deck : DeckBase//MonoBehaviour, IPointerClickHandler
+public class Deck : DeckBase
 {
-    //public List<CardBase> cards;
-
-    //public Owner owner;
-
     public Hand playerHand;
     public DiscardPile discardPile;
-    //public GameObject cardBack;
 
+    [Server]
     public override void InitializeDeck()
     {
-        var listCards = new List<Card>();
-        Card dagger = Resources.Load<Card>("Cards/Starters/Dagger");
-        Card sword = Resources.Load<Card>("Cards/Starters/Sword");
-        Card gold = Resources.Load<Card>("Cards/Starters/Gold");
-        Card ruby = Resources.Load<Card>("Cards/Starters/Ruby");
+        var listCards = new List<string>();
+        
+        var starters = GameManager.Instance.allCards.Where(c => c.cardType == CardType.Starter).Select(c => c.Id);
+        var goldCardId = GameManager.Instance.allCards.FirstOrDefault(c => c.name == "Gold").Id;
 
-        listCards.Add(dagger);
-        listCards.Add(sword);
-        listCards.Add(ruby);
+        listCards.AddRange(starters);
         while (listCards.Count < 7)
-            listCards.Add(gold);
+            listCards.Add(goldCardId);
 
-        cards = listCards;
-        ShuffleDeck();
+        foreach(var c in listCards)
+            cards.Add(c);
+
+        cards.ShuffleDeck();
 
         Debug.Log("Initialized Starter Deck, Count = " + cards.Count);
     }
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (owner == Owner.Player)
-        {
-            if (cards.Any())
-            {
-                if (playerHand.transform.childCount > 6)
-                {
-                    GameManager.Instance.ShowMessage("Hand is already full", Color.red);
-                }
-                else 
-                {
-                    Debug.Log("Draw CardBase from Player Deck");
-                    var card = DrawNextCard();
-                    if (card != null)
-                        playerHand.AddHandCard(card);
-                }
-            }
-            else 
-            {
-                ResetDeck();
-            }
-        }
+        Debug.Log("Moved to Server");
+        //if (owner == Owner.Player)
+        //{
+        //    if (cards.Any())
+        //    {
+        //        if (playerHand.transform.childCount > 6)
+        //        {
+        //            GameManager.Instance.ShowMessage("Hand is already full", Color.red);
+        //        }
+        //        else
+        //        {
+        //            Debug.Log("Draw Card from Player Deck");
+        //            var card = DrawNextCard();
+        //            if (card != null)
+        //                playerHand.AddHandCard(card);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ResetDeck();
+        //    }
+        //}
     }
 
     public void ResetDeck()
     {
         //cards = discardPile.cards;
-        cards = discardPile.EmptyPile();
+        cards.AddRange(discardPile.EmptyPile());
 
-        ShuffleDeck();
+        cards.ShuffleDeck();
 
-        if (cards.Any()) 
+        if (cards.Any())
         {
             Debug.Log("Resfhuffled");
             ShowDeck();
@@ -76,44 +73,4 @@ public class Deck : DeckBase//MonoBehaviour, IPointerClickHandler
         else
             GameManager.Instance.ShowMessage("No Cards to reshuffle into Deck.", Color.red);
     }
-
-    //List<CardBase> ShuffleDeck(List<CardBase> cards)
-    //{
-    //    var listShuffled = new List<CardBase>();
-    //    var iterations = cards.Count;
-    //    for (int i = 0; i < iterations; i++)
-    //    {
-    //        var randomIndex = Random.Range(0, cards.Count);
-            
-    //        //pick random card and remove it from list
-    //        var pickedCard = cards[randomIndex];
-    //        cards.RemoveAt(randomIndex);
-
-    //        //add random card to new list
-    //        listShuffled.Add(pickedCard);
-    //    }
-
-    //    return listShuffled;
-    //}
-
-    //public CardBase DrawNextCard()
-    //{
-    //    if (cards.Any())
-    //    {
-    //        //always draw first aka top card
-    //        var drawCard = cards[0];
-    //        cards.RemoveAt(0);
-    //        if (cards.Count == 0)
-    //            HideDeck();
-    //        return drawCard;
-    //    }
-    //    else 
-    //    {
-    //        return null;
-    //    }
-    //}
-    //void HideDeck()
-    //{
-    //    cardBack.SetActive(false);
-    //}
 }

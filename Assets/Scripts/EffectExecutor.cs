@@ -1,14 +1,16 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class EffectExecutor : MonoBehaviour
+public class EffectExecutor : NetworkBehaviour
 {
     public static EffectExecutor Instance;
 
-    public DisplayPlayerStats player;
-    public DisplayPlayerStats enemy;
+    public Player player;
+    public Player enemy;
 
     private void Start()
     {
@@ -19,31 +21,47 @@ public class EffectExecutor : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    [Client]
+    private void Update()
+    {
+        if (player == null)
+            player = NetworkClient.localPlayer?.gameObject.GetComponent<Player>();
+        else if (enemy == null)
+            player = GameManager.Instance.players.FirstOrDefault(p => p.netId != player.netId);
+    }
+    [Server]
     public void Heal(int amount)
     {
-        player.AddHealthToPool(amount);
+        player.AddToHealthPool(amount);
     }
+    [Server]
     public void AddGold(int amount)
     {
-        player.AddGoldToPool(amount);
+        player.AddToGoldPool(amount);
     }
+    [Server]
     public void AddDamage(int amount)
     {
-        player.AddDamageToPool(amount);
+        player.AddToDamagePool(amount);
     }
 
-    public void DealDamage(Card card, int amount)
+    [Server]
+    public void DealDamage(Card target, int amount)
     { 
-        if(card.health <= amount)
+        if(target.health <= amount)
         {
+
+            player.AddToDamagePool(-target.health);
             throw new NotImplementedException();
         }
     }
 
+    [Server]
     public void DealDamageToPlayer()
     {
-        enemy.AddHealthToPool(-player.playerData.DamagePool);
-        player.AddDamageToPool(-player.playerData.DamagePool);
+        enemy.AddToDamagePool(-player.DamagePool);
+        player.AddToHealthPool(-player.DamagePool);
     }
 
 }

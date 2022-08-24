@@ -1,30 +1,57 @@
+using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Hand : MonoBehaviour
 {
+    //public readonly SyncList<string> handCards = new SyncList<string>();
+    public GameObject cardPlaceholder;
+    public GameObject cardBack;
     public Owner owner;
 
-    public GameObject cardPlaceholder;
-    public GameObject canvas;
+    //[Server]
+    //public void AddHandCard(string cardId)
+    //{
+    //    handCards.Add(cardId);
+    //    AddHandCardRpc(cardId);
+    //}
 
-    public List<Card> cards;
-    // Start is called before the first frame update
-    void Start()
+    public void AddHandCard(string cardId)
     {
-        cards = new List<Card>();
-    }
+        GameObject newCard = null;
+        if (owner == Owner.Player)
+        {
+            newCard = Instantiate(cardPlaceholder, transform);
+            var placeHolder = newCard.GetComponent<CardPlaceholder>();
 
-    public void AddHandCard(Card card)
-    {
-        var newCard = Instantiate(cardPlaceholder, transform);
-        var placeHolder = newCard.GetComponent<CardPlaceholder>();
-        placeHolder.card = card;
-        placeHolder.instantiatedIn = InstantiatedField.Hand;
-        placeHolder.DisplayCard();
+            placeHolder.card = GameManager.Instance.allCards.Where(c => c.Id == cardId).FirstOrDefault();
+            placeHolder.instantiatedIn = InstantiatedField.PlayerHand;
+            placeHolder.DisplayCard();
+        }
+        else 
+        {
+            newCard = Instantiate(cardBack, transform);
+        }
 
         newCard.transform.SetParent(transform);
         newCard.transform.SetAsLastSibling();
+    }
+
+    public void RemoveCard(int index)
+    {
+        if (index == -1)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+        }
+        else 
+        {
+            Destroy(transform.GetChild(index).gameObject);
+        }
     }
 }

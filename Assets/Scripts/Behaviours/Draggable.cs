@@ -1,10 +1,11 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Draggable : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     Vector3 startPos;
     Vector3 endPos;
@@ -12,6 +13,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     Card card;
 
     bool dropped = false;
+    public Player player;
 
     Transform dropTarget;
     // Start is called before the first frame update
@@ -21,18 +23,25 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         startPos = transform.position;
     }
 
+    void Update() 
+    {
+        if (player == null)
+            player = NetworkClient.localPlayer.gameObject.GetComponent<Player>();
+            //player = GameManager.Instance.players.FirstOrDefault(p => p.isLocalPlayer);
+    }
+
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
-        if (dropped)
-            return;
-      
-            startPos = transform.position;
+        startPos = transform.position;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (dropped)
             return;
+        if (!player.isMyTurn)
+            return;
+
         endPos = GetWorldPoint(eventData.position);
         transform.position = Vector3.Lerp(transform.position, endPos, 10);
     }
@@ -41,31 +50,22 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         return Camera.main.ScreenToWorldPoint(position);
     }
+
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (dropped)
-            return;
-       
+
         if (dropTarget != null)
         {
-            transform.SetParent(dropTarget);
-            
-            
-            //only calculate position if theres already a child there
-            if (dropTarget.childCount > 0)
-            {
-                SetChildPosition();
-            }
+            var index = GetNewChildIndex();
+            if (index == -1)
+                Debug.LogError("FieldCard Index could not be determined");
 
-            card.ApplyInstantEffects();
-            if (!card.isPermanent)
-            {
-                StartCoroutine(WaitForDiscard());
-            }
+            var handIndex = transform.GetSiblingIndex();
+            GameManager.Instance.CmdPlayCardOnField(player, index, handIndex, card.Id);
 
             dropped = true;
         }
-        else 
+        else
         {
             Debug.Log("No Drop Target present.");
             endPos = startPos;
@@ -73,14 +73,16 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         }
     }
 
-    private void SetChildPosition()
+    private int GetNewChildIndex()
     {
+        if (dropTarget.childCount < 1)
+            return 0;
         //see if its to the left of the first.
         if (transform.position.x < dropTarget.GetChild(0).transform.position.x)
-            transform.SetAsFirstSibling();
+            return 0;
         //see if its to the right of the last.
         if (transform.position.x > dropTarget.GetChild(dropTarget.childCount - 1).transform.position.x)
-            transform.SetAsLastSibling();
+            return dropTarget.childCount - 1;
 
         for (int i = 0; i < dropTarget.childCount - 1; i++)
         {
@@ -92,26 +94,25 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                 var nextChild = dropTarget.GetChild(i + 1);
                 if (nextChild.transform.position.x > transform.position.x)
                 {
-                    //this is the new position
-                    Debug.Log("New Child Index = " + i + 1);
-                    transform.SetSiblingIndex(i + 1);
-                    break;
+                    return i + 1;
                 }
             }
         }
+
+        return -1;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("TriggerEnter");
-        var dropZone = collision.gameObject.GetComponent<DropZone>();
-        if (dropZone != null && dropZone.owner == Owner.Player)
+        var field = collision.gameObject.GetComponent<Field>();
+        if (field != null && field.owner == Owner.Player)
         {
             //Drop on Field
-            if (dropZone.transform.childCount < 7)
+            if (field.transform.childCount < 7)
             {
-                dropTarget = dropZone.transform;
-                Debug.Log("Field " + dropZone.name + " set as Target");
+                dropTarget = field.transform;
+                Debug.Log("Field " + field.name + " set as Target");
             }
             else
             {
@@ -119,7 +120,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                 GameManager.Instance.ShowMessage("Field already full.", Color.red);
             }
         }
-        else 
+        else
         {
             Debug.Log("No Drop Target set.");
         }
@@ -131,12 +132,5 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         dropTarget = null;
     }
 
-    IEnumerator WaitForDiscard()
-    {
-        yield return new WaitForSeconds(1);
 
-        var discardPile = FindObjectsOfType<DiscardPile>().Where(m => m.owner == Owner.Player).First();
-        discardPile.AddCardToPile(card);
-        Destroy(gameObject);
-    }
 }

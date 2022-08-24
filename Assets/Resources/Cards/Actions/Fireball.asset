@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: 0
   Id: 1a34c464-09b9-4c20-b23e-60aa335da00d
-  cardType: 0
+  cardType: 1
   name: FIreball
   sprite: {fileID: 0}
   isPermanent: 0
