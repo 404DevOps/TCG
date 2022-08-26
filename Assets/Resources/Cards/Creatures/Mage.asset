@@ -9,23 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 394d815cec4ab4e4d8f080d5a10df354, type: 3}
+  m_Script: {fileID: 11500000, guid: 2620e1c666dcfba4b9d4a6cc3114c98d, type: 3}
   m_Name: Mage
   m_EditorClassIdentifier: 
+  owner: 0
+  Id: d25e8b25-52a9-422b-917b-3c3da2e6332a
+  cardType: 0
   name: Mage
-  description: 
-  sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  sprite: {fileID: 0}
   isPermanent: 1
-  instantEffect:
-  - effectType: 2
-    amount: 1
-    targetsCreature: 0
-    target: 0
-    Description: Gain {0} Gold
   faction: 1
   cost: 4
+  health: 3
+  hasTaunt: 0
+  instantEffect:
+  - effectType: 1
+    amount: 4
+    targetsCreature: 0
+    target: 0
+    Description: Gain {0} Damage
   comboEffect: []
   sacrificeEffect: []
-  health: 5
-  hasTaunt: 0
   tapEffect: []

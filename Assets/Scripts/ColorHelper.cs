@@ -16,7 +16,7 @@ public static class ColorHelper
                 return Color.red;
             case Faction.Imperial: 
                 return Color.yellow;
-            default: 
+            default: //Neutral Cards only
                 return Color.white;
         }
     }

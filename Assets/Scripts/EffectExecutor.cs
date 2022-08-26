@@ -1,49 +1,45 @@
+using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class EffectExecutor : MonoBehaviour
+public class EffectExecutor : NetworkBehaviour
 {
-    public static EffectExecutor Instance;
 
-    public PlayerStats player;
-    public PlayerStats enemy;
-
-    private void Start()
+    [Server]
+    public static void Heal(Player player, int amount)
     {
-        if (Instance == null)
-            Instance = this;
-        else
-        {
-            Destroy(gameObject);
-        }
+        player.AddToHealthPool(amount);
     }
-    public void Heal(int amount)
+    [Server]
+    public static void AddGold(Player player, int amount)
     {
-        player.AddHealthToPool(amount);
+        player.AddToGoldPool(amount);
     }
-    public void AddGold(int amount)
+    [Server]
+    public static void AddDamage(Player player, int amount)
     {
-        player.AddGoldToPool(amount);
-    }
-    public void AddDamage(int amount)
-    {
-        player.AddDamageToPool(amount);
+        player.AddToDamagePool(amount);
     }
 
-    public void DealDamage(CreatureCard card, int amount)
+    [Server]
+    public void DealDamage(Card target, int amount)
     { 
-        if(card.health <= amount)
-        {
-            throw new NotImplementedException();
-        }
+        //if(target.health <= amount)
+        //{
+
+        //    player.AddToDamagePool(-target.health);
+        //    throw new NotImplementedException();
+        //}
     }
 
+    [Server]
     public void DealDamageToPlayer()
     {
-        enemy.AddHealthToPool(-player.DamagePool);
-        player.AddDamageToPool(-player.DamagePool);
+       // enemy.AddToDamagePool(-player.DamagePool);
+       // player.AddToHealthPool(-player.DamagePool);
     }
 
 }

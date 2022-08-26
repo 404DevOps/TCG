@@ -8,14 +8,14 @@ using UnityEngine.UI;
 public class DamageButton : MonoBehaviour
 {
     Button button;
-    PlayerStats player;
+    Player player;
     public bool isActive;
     public GameObject redArrow;
     // Start is called before the first frame update
     void Start()
     {
         button = GetComponent<Button>();
-        player = FindObjectsOfType<PlayerStats>().Where(p => p.owner == Owner.Player).FirstOrDefault();
+        player = FindObjectsOfType<Player>().Where(p => p.owner == Owner.Player).FirstOrDefault();
     }
 
     public void SetActive()
@@ -40,6 +40,6 @@ public class DamageButton : MonoBehaviour
     void DealDamage(object sender, DrawArrow.TargetSelectedEventArgs e)
     {
         Debug.Log("DealDamage Event handled in DamageButton.cs");
-        EffectExecutor.Instance.DealDamageToPlayer();
+        //EffectExecutor.Instance.DealDamageToPlayer();
     }
 }

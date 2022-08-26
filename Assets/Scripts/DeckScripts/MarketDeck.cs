@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,48 +9,71 @@ public class MarketDeck : DeckBase
     public GameObject marketField;
     public GameObject placeholderPrefab;
 
-    public override void Start()
-    {
-        InitializeDeck();
+    public readonly SyncList<string> marketCards = new SyncList<string>();
 
+    public List<Card> creatureCards;
+    public List<Card> actionCards;
+
+    //Server repares the Deck
+    [Server]
+    public override void InitializeDeck()
+    {
+        var allCards = new List<string>();
+
+        //only take market cards, so creatures and actions
+        allCards = GameManager.Instance.allCards.Where(c => c.cardType == CardType.Action || c.cardType == CardType.Creature).Select(c => c.Id).ToList();
+
+        //Add each cards to market deck 3 times
+        foreach (var c in allCards)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                cards.Add(c);
+            }
+        }
+
+        cards.ShuffleDeck();
+    }
+
+    [Server]
+    public void InitializeMarketField()
+    {
         //add first five cards to market
         for (int i = 0; i < 5; i++)
         {
-            AddCardToMarket();
+            AddCardToMarketField();
         }
     }
 
-    public override void InitializeDeck()
+    [Server]
+    public void AddCardToMarketField(int index = 0)
     {
-        var slime = Resources.Load<CreatureCard>("Cards/Creatures/Slime");
-        var mage = Resources.Load<CreatureCard>("Cards/Creatures/Mage");
-        var vamp = Resources.Load<CreatureCard>("Cards/Creatures/Vampire");
-        var fireball = Resources.Load<ActionCard>("Cards/Actions/Fireball");
-        var heal = Resources.Load<ActionCard>("Cards/Actions/Heal");
-        var icebolt = Resources.Load<ActionCard>("Cards/Actions/Icebolt");
-        for (int i = 0; i < 3; i++)
-        {
-            cards.Add(slime);
-            cards.Add(mage);
-            cards.Add(vamp);
-            cards.Add(fireball);
-            cards.Add(icebolt);
-            cards.Add(heal);
-        }
+        //add card to synclist on server
+        var cardId = DrawNextCard();
+        marketCards.Add(cardId);
 
-        ShuffleDeck();
+        SpawnMarketCardRpc(index, cardId);
     }
 
-
-    public void AddCardToMarket(int index = 0)
+    [ClientRpc]
+    public void SpawnMarketCardRpc(int index, string cardId)
     {
-        var card = DrawNextCard();
+        //make card visible for clients
+
         var newCard = Instantiate(placeholderPrefab, marketField.transform);
         var ph = newCard.GetComponent<CardPlaceholder>();
         ph.instantiatedIn = InstantiatedField.Market;
-        ph.card = card;
+        ph.card = GameManager.Instance.allCards.Where(c => c.Id == cardId).FirstOrDefault();
+        ph.DisplayCard();
 
         //Set New Market card to correct position
         newCard.transform.SetSiblingIndex(index);
+    }
+
+    [ClientRpc]
+    public void RemoveMarketCardRpc(int index)
+    {
+        if(marketField.transform.childCount > 0)
+            Destroy(marketField.transform.GetChild(index).gameObject);
     }
 }

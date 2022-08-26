@@ -37,7 +37,7 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
     void Update()
     {
-        lineRenderer.material.SetTextureOffset("_MainTex", Vector2.left * speed * Time.time);
+        lineRenderer.material.SetTextureOffset("_MainTex", speed * Time.time * Vector2.left);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -47,7 +47,6 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
             currentPosition = GetWorldPoint(Input.mousePosition);
 
             var dist = Vector3.Distance(startPosition, currentPosition);
-            var positions = dist / 1.2f;
 
             lineRenderer.enabled = true;
             lineRenderer.positionCount = 2;
@@ -96,14 +95,14 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
             if (actionType == ActionType.Damage)
             {
                 Debug.Log(element.gameObject.name);
-                if (element.gameObject.GetComponent<PlayerStats>()?.owner == Owner.Enemy)
+                if (element.gameObject.GetComponent<DisplayPlayerStats>()?.Owner == Owner.Enemy)
                 {
                     target = element.gameObject;
                     return true;
                 }
             }
            
-            if (element.gameObject.GetComponent<DisplayCreature>()?.card?.owner == Owner.Enemy)
+            if (element.gameObject.GetComponent<DisplayCard>()?.card?.owner == Owner.Enemy)
             {
                 target = element.gameObject;
                 return true;
