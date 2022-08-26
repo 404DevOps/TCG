@@ -102,7 +102,7 @@ public class GameManager : NetworkBehaviour
         else
         {
             if (player.isLocalPlayer)
-                Instance.ShowMessage("Not enough Money", Color.red);
+                Instance.RpcMessage("Not enough Gold.", Color.red);
         }
     }
 
@@ -233,6 +233,12 @@ public class GameManager : NetworkBehaviour
         hoverText.color = color;
     }
 
+    [ClientRpc]
+    public void RpcMessage(string message, Color color)
+    {
+        ShowMessage(message, color);
+    }
+
     #endregion
 
     #region GameStateManagement
@@ -289,9 +295,10 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    [Server]
     public void GameOver()
     {
-        ShowMessage("Game Over!!!", Color.red);
+        RpcMessage("Game Over!!!", Color.red);
         serverState = ServerState.Ended;
     }
 

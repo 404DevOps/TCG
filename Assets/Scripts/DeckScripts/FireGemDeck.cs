@@ -46,7 +46,7 @@ public class FireGemDeck : DeckBase
         }
         else
         {
-            GameManager.Instance.ShowMessage("Not enough Money.", Color.red);
+            GameManager.Instance.RpcMessage("Not enough Gold.", Color.red);
         }
     }
 

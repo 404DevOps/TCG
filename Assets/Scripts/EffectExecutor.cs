@@ -24,22 +24,67 @@ public class EffectExecutor : NetworkBehaviour
         player.AddToDamagePool(amount);
     }
 
-    [Server]
-    public void DealDamage(Card target, int amount)
-    { 
-        //if(target.health <= amount)
-        //{
+    //deal damage is raised on player action, therefore command
+    [Command(requiresAuthority = false)]
+    public void DealDamage(Player player, Player enemy, string fieldId)
+    {
 
-        //    player.AddToDamagePool(-target.health);
-        //    throw new NotImplementedException();
-        //}
+        //if target is a card;
+        var cardId = enemy.fieldCards.First(c => c.fieldId == fieldId).cardId;
+        var card = GameManager.Instance.allCards.FirstOrDefault(c => c.Id == cardId);
+
+        //if not attacking taunt creature, check if theres no taunt creature that needs to be attacked before.
+        if (!card.hasTaunt)
+        {
+            if (HasTauntCards(enemy))
+            {
+                if (player.isLocalPlayer)
+                    GameManager.Instance.RpcMessage("Attack Creatures with Taunt first.", Color.red);
+                return;
+            }
+        }
+        
+        if (card.health <= player.DamagePool)
+        {
+            //subtract from damage pool
+            player.AddToDamagePool(-card.health);
+            //remove card that was damaged and put on discard pile.
+            enemy.fieldCards.RemoveAll(c => c.fieldId == fieldId);
+            enemy.discardCards.Add(card.Id);
+        }
+        else
+        {
+            if (player.isLocalPlayer)
+                GameManager.Instance.RpcMessage("Not enough Damage to Stun that Creature", Color.red);
+        }
     }
 
     [Server]
-    public void DealDamageToPlayer()
+    private bool HasTauntCards(Player enemy)
     {
-       // enemy.AddToDamagePool(-player.DamagePool);
-       // player.AddToHealthPool(-player.DamagePool);
+        foreach (var c in enemy.fieldCards)
+        {
+            var card = GameManager.Instance.allCards.FirstOrDefault(card => card.Id == c.cardId);
+            if (card.hasTaunt)
+                return true;
+        }
+
+        return false;
+    }
+
+    [Command(requiresAuthority = false)]
+    public void DealDamageToPlayer(Player player, Player enemy)
+    {
+        if (HasTauntCards(enemy))
+        {
+            if (player.isLocalPlayer)
+                GameManager.Instance.RpcMessage("Attack Creatures with Taunt first.", Color.red);
+            return;
+        }
+
+        //always deal all damage at once.
+        enemy.AddToHealthPool(-player.DamagePool);
+        player.DamagePool.Value = 0;
     }
 
 }

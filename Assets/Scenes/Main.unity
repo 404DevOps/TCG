@@ -4881,7 +4881,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  Owner: 0
+  Owner: 1
   txtName: {fileID: 36727250}
   txtGold: {fileID: 1738342114}
   txtHealth: {fileID: 1891273636}

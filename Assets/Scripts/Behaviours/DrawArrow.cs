@@ -22,7 +22,7 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
     public event EventHandler<TargetSelectedEventArgs> TargetSelected;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -97,13 +97,15 @@ public class DrawArrow : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
                 Debug.Log(element.gameObject.name);
                 if (element.gameObject.GetComponent<DisplayPlayerStats>()?.Owner == Owner.Enemy)
                 {
+                    Debug.Log("Targeted Enemy");
                     target = element.gameObject;
                     return true;
                 }
             }
            
-            if (element.gameObject.GetComponent<DisplayCard>()?.card?.owner == Owner.Enemy)
+            if (element.gameObject.GetComponent<Damageable>())
             {
+                Debug.Log("Targeted Card");
                 target = element.gameObject;
                 return true;
             }
