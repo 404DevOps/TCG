@@ -7,18 +7,13 @@ using UnityEngine;
 public class DiscardPile : NetworkBehaviour
 {
     public Owner owner;
-    public readonly SyncList<string> cards = new SyncList<string>();
-
     public GameObject cardPlaceholderPrefab;
 
-    [ClientRpc]
+    [Client]
     public void AddCardToPile(string cardId)
     {
-        //Destroy Current TopCard
-        DestroyChildObjects();
-
-        cards.Add(cardId);
-
+        //Remove old Visual
+        EmptyPile();
 
         var newCard = Instantiate(cardPlaceholderPrefab, transform);
         var placeholder = newCard.GetComponent<CardPlaceholder>();
@@ -26,21 +21,12 @@ public class DiscardPile : NetworkBehaviour
 
         //get card from game manager list
         placeholder.card = GameManager.Instance.allCards.Where(c => c.Id == cardId).FirstOrDefault();
-    }
+        placeholder.DisplayCard();
 
-    [Server]
-    public List<string> EmptyPile()
-    {
-        //destroy placeholder
-        DestroyChildObjects();
-
-        var pile = cards.ToList();
-        cards.RemoveAll(id => id != null);
-        return pile;
     }
 
     [Client]
-    void DestroyChildObjects()
+    public void EmptyPile()
     {
         //destroy placeholder and instantiate new one
         if (transform.childCount > 0)

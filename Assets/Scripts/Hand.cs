@@ -7,18 +7,11 @@ using UnityEngine;
 
 public class Hand : MonoBehaviour
 {
-    //public readonly SyncList<string> handCards = new SyncList<string>();
     public GameObject cardPlaceholder;
     public GameObject cardBack;
     public Owner owner;
 
-    //[Server]
-    //public void AddHandCard(string cardId)
-    //{
-    //    handCards.Add(cardId);
-    //    AddHandCardRpc(cardId);
-    //}
-
+    [Client]
     public void AddHandCard(string cardId)
     {
         GameObject newCard = null;
@@ -40,6 +33,7 @@ public class Hand : MonoBehaviour
         newCard.transform.SetAsLastSibling();
     }
 
+    [Client]
     public void RemoveCard(int index)
     {
         if (index == -1)

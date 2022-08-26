@@ -69,4 +69,11 @@ public class MarketDeck : DeckBase
         //Set New Market card to correct position
         newCard.transform.SetSiblingIndex(index);
     }
+
+    [ClientRpc]
+    public void RemoveMarketCardRpc(int index)
+    {
+        if(marketField.transform.childCount > 0)
+            Destroy(marketField.transform.GetChild(index).gameObject);
+    }
 }

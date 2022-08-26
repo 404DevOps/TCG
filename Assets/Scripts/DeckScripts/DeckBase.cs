@@ -38,7 +38,7 @@ public class DeckBase : NetworkBehaviour, IPointerClickHandler
             var drawCard = cards[0];
             cards.RemoveAt(0);
             if (cards.Count == 0)
-                HideDeck();
+                RpcHideDeck();
             return drawCard;
         }
         else 
@@ -48,13 +48,13 @@ public class DeckBase : NetworkBehaviour, IPointerClickHandler
     }
 
     [ClientRpc]
-    public void HideDeck()
+    public void RpcHideDeck()
     {
         deckVisual.SetActive(false);
     }
 
     [ClientRpc]
-    public void ShowDeck()
+    public void RpcShowDeck()
     {
         deckVisual.SetActive(true);
     }

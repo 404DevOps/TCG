@@ -8,18 +8,13 @@ using Mirror;
 public class DisplayPlayerStats : NetworkBehaviour
 {
     public Owner Owner;
-    //public Player playerData;
 
-    //Display PlayerStats
     public TextMeshProUGUI txtName;
     public TextMeshProUGUI txtGold;
     public TextMeshProUGUI txtHealth;
     public TextMeshProUGUI txtDamage;
 
-    public DamageButton damageButton;
-
-
-    // Update is called once per frame
+    [Client]
     public void UpdateTexts(int? gold, int? damage, int? health)
     {
         if(damage != null)
@@ -30,6 +25,7 @@ public class DisplayPlayerStats : NetworkBehaviour
             txtHealth.text = health.ToString();        
     }
 
+    [Client]
     public void SetPlayerName(string name)
     {
         txtName.text = name;

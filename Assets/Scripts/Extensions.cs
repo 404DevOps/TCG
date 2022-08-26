@@ -63,5 +63,24 @@ public static class Extensions
         return deck;
 
     }
+
+    [Server]
+    public static SyncList<string> ShufflePileIntoDeck(this SyncList<string> deck, SyncList<string> pile)
+    {
+        //cards = discardPile.cards;
+        deck.AddRange(pile);
+        pile.Clear();
+
+        deck.ShuffleDeck();
+
+        if (deck.Any())
+        {
+            Debug.Log("Resfhuffled");
+            return deck;
+        }
+        
+        GameManager.Instance.ShowMessage("No Cards to reshuffle into Deck.", Color.red);
+        return null;
+    }
 }
 

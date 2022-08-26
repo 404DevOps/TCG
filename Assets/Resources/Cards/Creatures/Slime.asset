@@ -17,7 +17,7 @@ MonoBehaviour:
   cardType: 0
   name: Slime
   sprite: {fileID: 0}
-  isPermanent: 0
+  isPermanent: 1
   faction: 0
   cost: 2
   health: 3

@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,12 +26,15 @@ public class GameManager : NetworkBehaviour
     public Button DamageButton;
 
     //Server Variables
-    public readonly SyncList<Player> players = new SyncList<Player>();
+    public static readonly List<Player> players = new List<Player>();
+    public readonly SyncList<uint> playerIds = new SyncList<uint>();
+
+
     [SyncVar]
     public ServerState serverState;
 
     [SyncVar(hook = nameof(OnTurnChanged))]
-    public Player currentTurnPlayer = null;
+    public uint currentTurnPlayer = new();
 
     [SyncVar]
     public bool isGameRunning;
@@ -61,10 +65,56 @@ public class GameManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPlayCardOnField(Player player, int fieldIndex, int handIndex, string cardId)
     {
-        player.fieldCards.Insert(fieldIndex, cardId);
+        //generate GUID on server to be the same on all clients
+        var guid = GUID.Generate().ToString();
+        var cardInfo = new FieldCard(cardId, guid);
+
         player.handCards.RemoveAt(handIndex);
+        player.fieldCards.Insert(fieldIndex, cardInfo);
+
         var card = Instance.allCards.FirstOrDefault(c => c.Id == cardId);
-        card.ApplyInstantEffects();
+        card.ApplyInstantEffects(player);
+
+        if (!card.isPermanent)
+            StartCoroutine(WaitForDiscard(cardInfo, player));
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdBuyMarketCard(Player player, string cardId, int index)
+    {
+        //get card on server to prevent cheating with costs compared to if its a parameter
+        var card = Instance.allCards.Where(c => c.Id == cardId).FirstOrDefault();
+
+        //Is it even possible to buy it?
+        if (player.GoldPool >= card.cost)
+        {
+            player.AddToGoldPool(-card.cost);
+            //put in player discard pile
+            player.discardCards.Add(card.Id);
+
+            //tell client where to remove the card
+            Instance.marketDeck.RemoveMarketCardRpc(index);
+
+            //only tell where to place it, server will choose a new card anyways.
+            Instance.marketDeck.AddCardToMarketField(transform.GetSiblingIndex());
+
+        }
+        else
+        {
+            if (player.isLocalPlayer)
+                Instance.ShowMessage("Not enough Money", Color.red);
+        }
+    }
+
+    [Server]
+    IEnumerator WaitForDiscard(FieldCard cardInfo, Player player)
+    {
+        yield return new WaitForSeconds(1);
+
+        var card = player.fieldCards.FirstOrDefault(c => c.fieldId == cardInfo.fieldId);
+
+        player.fieldCards.RemoveAll(c => c.fieldId == cardInfo.fieldId);
+        player.discardCards.Add(cardInfo.cardId);
     }
 
     #endregion
@@ -75,14 +125,13 @@ public class GameManager : NetworkBehaviour
     void DealCards(Player player)
     {
         //Player to go First only gets 3 Cards on the first turn
-        if (firstTurn && player == currentTurnPlayer)
+        if (firstTurn && player.netId == currentTurnPlayer)
         {
             for (int i = 0; i < 3; i++)
             {
                 var card = player.deckCards.DealCardFromDeck();
                 player.handCards.Add(card);
             }
-
             firstTurn = false;
         }
         else
@@ -91,6 +140,13 @@ public class GameManager : NetworkBehaviour
             for (int i = 0; i < 5; i++)
             {
                 var card = player.deckCards.DealCardFromDeck();
+                //null means deck is empty, therefore reshuffle
+                if(card == null)
+                {
+                    Debug.Log("Reshuffle Deck");
+                    player.deckCards.ShufflePileIntoDeck(player.discardCards);
+                    card = player.deckCards.DealCardFromDeck();
+                }
                 player.handCards.Add(card);
             }
         }
@@ -122,25 +178,41 @@ public class GameManager : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdEndTurn()
     {
+        Debug.Log("End Turn pressed");
+        var p = players.FirstOrDefault(p => p.netId == currentTurnPlayer);
+
+        //discard all cards into pile
+        foreach (var card in p.handCards)
+        {
+            p.discardCards.Add(card);
+        }
+
+        //reset everything 
+        p.DamagePool.Value = 0;
+        p.GoldPool.Value = 0;
+        p.handCards.Clear();
+
+        //deal 5 new cards
+        DealCards(p);
+
         //next player's turn
-        currentTurnPlayer = Instance.players.FirstOrDefault(p => p.netId != currentTurnPlayer.netId);
+        currentTurnPlayer = players.FirstOrDefault(p => p.netId != currentTurnPlayer).netId;
     }
 
     [Client]
-    public void OnTurnChanged(Player oldValue, Player newValue)
+    public void OnTurnChanged(uint oldValue, uint newValue)
     {
         if (EndTurnButton == null)
             EndTurnButton = GameObject.Find("EndTurn").GetComponent<Button>(); ;
         Debug.Log("Turn Changed.");
-        //foreach (var p in players)
-        //    p.DetermineTurn();
+        foreach (var p in players)
+            p.isMyTurn = p.netId == newValue;
 
-        //Only Updates the Local player.
-        NetworkClient.localPlayer.gameObject.GetComponent<Player>().DetermineTurn();
-
-        if (newValue.isLocalPlayer)
+ 
+        if (NetworkClient.localPlayer.netId == newValue)
         {
             EndTurnButton.interactable = true;
+            Debug.Log("Players Turn: NetID" + newValue);
         }
         else 
         {
@@ -155,13 +227,10 @@ public class GameManager : NetworkBehaviour
     [Client]
     public void ShowMessage(string message, Color color)
     {
-        if (isLocalPlayer)
-        { 
-            var newMessage = Instantiate(messagePrefab, canvas.transform);
-            var hoverText = newMessage.GetComponent<HoverText>();
-            hoverText.text = message;
-            hoverText.color = color;
-        }
+        var newMessage = Instantiate(messagePrefab, canvas.transform);
+        var hoverText = newMessage.GetComponent<HoverText>();
+        hoverText.text = message;
+        hoverText.color = color;
     }
 
     #endregion
@@ -171,21 +240,28 @@ public class GameManager : NetworkBehaviour
     [Server]
     public void AddPlayer(Player player)
     {
-        if (players.Count <= 2)
-            players.Add(player);
-        else
-        {
-            Debug.LogError("Third Player tried to Join.");
-        }
+        playerIds.Add(player.netId);
+        players.Add(player);
 
-        if (players.Count == 2)
+        player.HealthPool.Value = 50;
+        player.GoldPool.Value = 0;
+        player.DamagePool.Value = 0;
+
+        if (playerIds.Count == 2)
             ServerNextState("InitializeGameBoard");
     }
 
     [Server]
     public void RemovePlayer(Player player)
     {
+        playerIds.Remove(player.netId);
         players.Remove(player);
+        
+    }
+
+    [ClientRpc]
+    public void RpcDestroyPlayerObject(Player player)
+    {
         Destroy(player.gameObject);
     }
 
@@ -204,10 +280,11 @@ public class GameManager : NetworkBehaviour
 
         //determine starting player
         var rand = Random.Range(0, players.Count);
-        currentTurnPlayer = players[rand];
+        currentTurnPlayer = players[rand].netId;
 
         foreach (var p in players)
         {
+            p.isMyTurn = p.netId == currentTurnPlayer;
             DealCards(p);
         }
     }
@@ -232,6 +309,32 @@ public class GameManager : NetworkBehaviour
     public void Awake()
     {
         Instance = this;
+        //playerIds.Callback += OnPlayerIdChanged;
+    }
+
+    private void OnPlayerIdChanged(SyncList<uint>.Operation op, int itemIndex, uint oldItem, uint newItem)
+    {
+        var player = FindObjectsOfType<Player>().FirstOrDefault(p => p.netId == newItem);
+        switch (op)
+        {
+            case SyncList<uint>.Operation.OP_ADD:
+                players.Add(player);
+                break;
+            case SyncList<uint>.Operation.OP_CLEAR:
+                players.Clear();
+                break;
+            case SyncList<uint>.Operation.OP_INSERT:
+                    players.Insert(itemIndex, player);
+                break;
+            case SyncList<uint>.Operation.OP_REMOVEAT:
+                    players.RemoveAt(itemIndex);
+                break;
+            case SyncList<uint>.Operation.OP_SET:
+                players[itemIndex] = player;
+                break;
+            default:
+                break;
+        }
     }
 
     public override void OnStartServer()

@@ -26,8 +26,10 @@ public class Draggable : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEnd
     void Update() 
     {
         if (player == null)
-            player = NetworkClient.localPlayer.gameObject.GetComponent<Player>();
-            //player = GameManager.Instance.players.FirstOrDefault(p => p.isLocalPlayer);
+        {
+            if (NetworkClient.localPlayer != null)
+                player = NetworkClient.localPlayer.gameObject.GetComponent<Player>();
+        }
     }
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -56,7 +58,7 @@ public class Draggable : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEnd
 
         if (dropTarget != null)
         {
-            var index = GetNewChildIndex();
+            var index = GetNewFieldIndex();
             if (index == -1)
                 Debug.LogError("FieldCard Index could not be determined");
 
@@ -73,16 +75,27 @@ public class Draggable : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEnd
         }
     }
 
-    private int GetNewChildIndex()
+    private int GetNewFieldIndex()
     {
         if (dropTarget.childCount < 1)
+        {
             return 0;
+        }
+
         //see if its to the left of the first.
         if (transform.position.x < dropTarget.GetChild(0).transform.position.x)
+        {
+            Debug.Log("Dropped Card Index set to 0 because its left to the first Child.");
             return 0;
+        }
+
         //see if its to the right of the last.
         if (transform.position.x > dropTarget.GetChild(dropTarget.childCount - 1).transform.position.x)
-            return dropTarget.childCount - 1;
+        {
+            var newIndex = dropTarget.childCount;
+            return newIndex;
+        }
+           
 
         for (int i = 0; i < dropTarget.childCount - 1; i++)
         {
@@ -94,17 +107,18 @@ public class Draggable : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEnd
                 var nextChild = dropTarget.GetChild(i + 1);
                 if (nextChild.transform.position.x > transform.position.x)
                 {
+                    Debug.Log($"Dropped Card got calculated Index = {i}");
                     return i + 1;
                 }
             }
         }
 
+        Debug.Log("Could not determine Field Index.");
         return -1;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("TriggerEnter");
         var field = collision.gameObject.GetComponent<Field>();
         if (field != null && field.owner == Owner.Player)
         {
@@ -112,23 +126,16 @@ public class Draggable : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEnd
             if (field.transform.childCount < 7)
             {
                 dropTarget = field.transform;
-                Debug.Log("Field " + field.name + " set as Target");
             }
             else
             {
                 dropTarget = null;
-                GameManager.Instance.ShowMessage("Field already full.", Color.red);
             }
-        }
-        else
-        {
-            Debug.Log("No Drop Target set.");
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Drop Target reset.");
         dropTarget = null;
     }
 

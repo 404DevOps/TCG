@@ -36,20 +36,20 @@ public class Card : ScriptableObject
     public List<CardEffectBase> tapEffect;
 
     [Server]
-    public void ApplyInstantEffects()
+    public void ApplyInstantEffects(Player player)
     {
         foreach (var fx in instantEffect)
         {
             switch (fx.effectType)
             {
                 case EffectType.Heal:
-                    EffectExecutor.Instance.Heal(fx.amount);
+                    EffectExecutor.Heal(player, fx.amount);
                     break;
                 case EffectType.AddDamage:
-                    EffectExecutor.Instance.AddDamage(fx.amount);
+                    EffectExecutor.AddDamage(player, fx.amount);
                     break;
                 case EffectType.AddGold:
-                    EffectExecutor.Instance.AddGold(fx.amount);
+                    EffectExecutor.AddGold(player, fx.amount);
                     break;
                 case EffectType.Stun:
                     Debug.Log("Stun not implemented");
@@ -60,4 +60,16 @@ public class Card : ScriptableObject
         }
     }
 
+}
+
+//struct used to identify field cards with guid
+public struct FieldCard
+{
+    public FieldCard(string cId, string fId)
+    {
+        cardId = cId;
+        fieldId = fId;
+    }
+    public string cardId;
+    public string fieldId;
 }

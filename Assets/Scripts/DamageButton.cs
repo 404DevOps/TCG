@@ -15,7 +15,7 @@ public class DamageButton : MonoBehaviour
     void Start()
     {
         button = GetComponent<Button>();
-        player = FindObjectsOfType<Player>().Where(p => p.Owner == Owner.Player).FirstOrDefault();
+        player = FindObjectsOfType<Player>().Where(p => p.owner == Owner.Player).FirstOrDefault();
     }
 
     public void SetActive()
@@ -40,6 +40,6 @@ public class DamageButton : MonoBehaviour
     void DealDamage(object sender, DrawArrow.TargetSelectedEventArgs e)
     {
         Debug.Log("DealDamage Event handled in DamageButton.cs");
-        EffectExecutor.Instance.DealDamageToPlayer();
+        //EffectExecutor.Instance.DealDamageToPlayer();
     }
 }

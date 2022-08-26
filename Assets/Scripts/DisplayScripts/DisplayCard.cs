@@ -1,3 +1,4 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 public class DisplayCard : MonoBehaviour
 {
     public Card card;
-
+    public FieldCard cardInfo;
     //Creature Card Attributes
     public TextMeshProUGUI txtHealth;
     public Image imgTaunt;
