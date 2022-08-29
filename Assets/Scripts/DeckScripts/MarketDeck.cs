@@ -50,6 +50,10 @@ public class MarketDeck : DeckBase
     {
         //add card to synclist on server
         var cardId = DrawNextCard();
+
+        //cant draw new card cause deck is empty. => game ends.
+        if (cardId == null)
+            GameManager.Instance.GameOver();
         marketCards.Add(cardId);
 
         SpawnMarketCardRpc(index, cardId);

@@ -9,7 +9,7 @@ public class HoverText : MonoBehaviour
 
     float startTime;
     float endTime;
-    float speed = 0.003f;
+    float speed = 0.03f;
 
     float waitDuration = 0.0f;
 
@@ -29,7 +29,7 @@ public class HoverText : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (startTime > endTime)
         {

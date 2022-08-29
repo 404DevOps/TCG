@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +67,7 @@ public class GameManager : NetworkBehaviour
     public void CmdPlayCardOnField(Player player, int fieldIndex, int handIndex, string cardId)
     {
         //generate GUID on server to be the same on all clients
-        var guid = GUID.Generate().ToString();
+        var guid = Guid.NewGuid().ToString();
         var cardInfo = new FieldCard(cardId, guid);
 
         player.handCards.RemoveAt(handIndex);
@@ -101,8 +102,8 @@ public class GameManager : NetworkBehaviour
         }
         else
         {
-            if (player.isLocalPlayer)
-                Instance.RpcMessage("Not enough Gold.", Color.red);
+            Instance.TargetRpcMessage(player.connectionToClient, "Not enough Gold.", Color.red);
+
         }
     }
 
@@ -233,6 +234,12 @@ public class GameManager : NetworkBehaviour
         hoverText.color = color;
     }
 
+    [TargetRpc]
+    public void TargetRpcMessage(NetworkConnection target, string message, Color color)
+    {
+        ShowMessage(message, color);
+    }
+
     [ClientRpc]
     public void RpcMessage(string message, Color color)
     {
@@ -262,7 +269,6 @@ public class GameManager : NetworkBehaviour
     {
         playerIds.Remove(player.netId);
         players.Remove(player);
-        
     }
 
     [ClientRpc]
@@ -285,7 +291,7 @@ public class GameManager : NetworkBehaviour
         serverState = ServerState.GameInProgress;
 
         //determine starting player
-        var rand = Random.Range(0, players.Count);
+        var rand = UnityEngine.Random.Range(0, players.Count);
         currentTurnPlayer = players[rand].netId;
 
         foreach (var p in players)
@@ -298,7 +304,20 @@ public class GameManager : NetworkBehaviour
     [Server]
     public void GameOver()
     {
-        RpcMessage("Game Over!!!", Color.red);
+        var p1 = players.First();
+        var p2 = players.First(p => p.netId != p1.netId);
+
+        string message = "";
+
+        if (p1.HealthPool > p2.HealthPool)
+            message = "Player 1 wins.";
+        else if (p1.HealthPool == p2.HealthPool)
+            message = "It's a Draw!";
+        else
+            message = "Player 2 wins.";
+
+        
+        RpcMessage(message, Color.red);
         serverState = ServerState.Ended;
     }
 

@@ -907,6 +907,8 @@ GameObject:
   - component: {fileID: 1764330572}
   - component: {fileID: 1764330573}
   - component: {fileID: 890777472903953669}
+  - component: {fileID: 8001328274801435686}
+  - component: {fileID: 9037168527404823724}
   m_Layer: 6
   m_Name: CardFace
   m_TagString: Untagged
@@ -1071,6 +1073,41 @@ MonoBehaviour:
   imgBorder: {fileID: 694622588645792468}
   abilityContainer: {fileID: 733857602273105860}
   abilityTextTemplate: {fileID: 797196961791305487}
+  isZoomCard: 0
+--- !u!114 &8001328274801435686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5785546367372110271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 9b46338910dd6b544930ac201efb7df8
+  hasSpawned: 0
+--- !u!114 &9037168527404823724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5785546367372110271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8ba5fe616938547bb291ba535b1f87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  card: {fileID: 0}
+  canvas: {fileID: 0}
+  cardPlaceholderPrefab: {fileID: 5785546367372110271, guid: 58378a75a62b4124e83e75358348d80d, type: 3}
 --- !u!1 &5868237857979778476
 GameObject:
   m_ObjectHideFlags: 0

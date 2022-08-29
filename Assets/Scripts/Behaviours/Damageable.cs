@@ -9,16 +9,6 @@ public class Damageable : MonoBehaviour
 
     private void Start()
     {
-        card = (Card)GetComponent<DisplayCard>().card;
-    }
-
-    public void ReceiveDamage(int amount)
-    {
-        if (amount - card.health >= 0)
-        {
-            return;
-            //AddCardToDiscardPile(card);
-            Destroy(gameObject);
-        }
+        card = GetComponent<DisplayCard>().card;
     }
 }

@@ -92,3 +92,6 @@ MonoBehaviour:
   card: {fileID: 0}
   instantiatedIn: 0
   cardPrefab: {fileID: 5785546367372110271, guid: 9b46338910dd6b544930ac201efb7df8, type: 3}
+  isZoomCard: 0
+  cardOffsetX: 7.355
+  cardOffsetY: 0

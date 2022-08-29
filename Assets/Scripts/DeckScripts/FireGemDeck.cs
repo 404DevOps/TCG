@@ -45,8 +45,8 @@ public class FireGemDeck : DeckBase
                 RpcDestroyFireGem();
         }
         else
-        {
-            GameManager.Instance.RpcMessage("Not enough Gold.", Color.red);
+        {   
+           GameManager.Instance.TargetRpcMessage(player.connectionToClient, "Not enough Gold.", Color.red);
         }
     }
 

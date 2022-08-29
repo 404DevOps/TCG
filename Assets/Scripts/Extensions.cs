@@ -80,7 +80,7 @@ public static class Extensions
         }
         
         //technically shouldnt happen since cards are only drawn at end of turn, where all hand cards are discarded first.
-        GameManager.Instance.RpcMessage("No Cards to reshuffle into Deck.", Color.red);
+        Debug.Log("No Cards to reshuffle into Deck.");
         return null;
     }
 }

@@ -25,6 +25,9 @@ public class Buyable : MonoBehaviour, IPointerClickHandler
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!player.isLocalPlayer)
+            return;
+
         if (!player.isMyTurn)
             return;
 

@@ -25,6 +25,8 @@ public class DisplayCard : MonoBehaviour
     public GameObject abilityContainer;
     public GameObject abilityTextTemplate;
 
+    public bool isZoomCard = false;
+
     private void Start()
     {
     }

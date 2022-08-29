@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4c8ba5fe616938547bb291ba535b1f87
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - card: {instanceID: 0}
+  - canvas: {instanceID: 0}
+  - cardPlaceholderPrefab: {fileID: 5785546367372110271, guid: 58378a75a62b4124e83e75358348d80d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -20,8 +20,7 @@ public class Player : NetworkBehaviour
     public readonly SyncList<FieldCard> fieldCards = new SyncList<FieldCard>();
     public readonly SyncList<string> discardCards = new SyncList<string>();
 
-    //[SyncVar(hook = nameof(OnPlayerNameChanged))]
-    public string PlayerName;
+    public readonly SyncVar<string> PlayerName = new SyncVar<string>("");
 
     public readonly SyncVar<int> DamagePool = new SyncVar<int>(0);
     public readonly SyncVar<int> HealthPool = new SyncVar<int>(0);
@@ -30,7 +29,10 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = nameof(OnTurnChanged))]
     public bool isMyTurn;
 
+    public string _playername;
+
     //initialize references locally
+    [Client]
     public void Start()
     {
         handCards.Callback += OnHandCardChanged;
@@ -41,31 +43,32 @@ public class Player : NetworkBehaviour
         HealthPool.Callback += OnHealthPoolChanged;
         DamagePool.Callback += OnDamagePoolChanged;
 
+        //PlayerName.Callback += OnPlayerNameChanged;
+
         if (isLocalPlayer)
         {
+            //_playername = PlayerPrefs.GetString("PlayerName");
+            _playername = "Player";
             owner = Owner.Player;           
             displayStats = GameObject.Find("PlayerStats").GetComponent<DisplayPlayerStats>();
             discardPile = GameObject.Find("PlayerDiscardPile").GetComponent<DiscardPile>();
             hand = GameObject.Find("PlayerHand").GetComponent<Hand>();
             field = GameObject.Find("PlayerField").GetComponent<Field>();
-            PlayerName = "Player";
         }
         else
         {
+            _playername = "Enemy";
             owner = Owner.Enemy;
             displayStats = GameObject.Find("EnemyStats").GetComponent<DisplayPlayerStats>();
             discardPile = GameObject.Find("EnemyDiscardPile").GetComponent<DiscardPile>();
             hand = GameObject.Find("EnemyHand").GetComponent<Hand>();
             field = GameObject.Find("EnemyField").GetComponent<Field>();
-            PlayerName = "Enemy";
         }
 
-        //DamagePool = 0;
-        //HealthPool = 50;
-        //GoldPool = 0;
-        displayStats.SetPlayerName(PlayerName);
+        displayStats.SetPlayerName(_playername);
         displayStats.UpdateTexts(GoldPool, DamagePool, HealthPool);
     }
+
 
 
     #region Callbacks
@@ -143,6 +146,7 @@ public class Player : NetworkBehaviour
         displayStats.SetPlayerName(newValue);
     }
 
+    [Client]
     void OnTurnChanged(bool oldValue, bool newValue)
     {
         if (isLocalPlayer)

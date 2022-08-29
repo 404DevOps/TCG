@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DamageButton : MonoBehaviour
+public class DamageButton : NetworkBehaviour
 {
     Button button;
     Player player;

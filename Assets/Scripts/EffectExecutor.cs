@@ -39,7 +39,7 @@ public class EffectExecutor : NetworkBehaviour
             if (HasTauntCards(enemy))
             {
                 if (player.isLocalPlayer)
-                    GameManager.Instance.RpcMessage("Attack Creatures with Taunt first.", Color.red);
+                    GameManager.Instance.TargetRpcMessage(player.connectionToClient, "Attack Creatures with Taunt first.", Color.red);
                 return;
             }
         }
@@ -55,7 +55,7 @@ public class EffectExecutor : NetworkBehaviour
         else
         {
             if (player.isLocalPlayer)
-                GameManager.Instance.RpcMessage("Not enough Damage to Stun that Creature", Color.red);
+                GameManager.Instance.TargetRpcMessage(player.connectionToClient, "Not enough Damage to Stun that Creature", Color.red);
         }
     }
 
@@ -78,13 +78,16 @@ public class EffectExecutor : NetworkBehaviour
         if (HasTauntCards(enemy))
         {
             if (player.isLocalPlayer)
-                GameManager.Instance.RpcMessage("Attack Creatures with Taunt first.", Color.red);
+                GameManager.Instance.TargetRpcMessage(player.connectionToClient, "Attack Creatures with Taunt first.", Color.red);
             return;
         }
 
         //always deal all damage at once.
         enemy.AddToHealthPool(-player.DamagePool);
         player.DamagePool.Value = 0;
+
+        if (enemy.HealthPool <= 0)
+            GameManager.Instance.GameOver();
     }
 
 }
