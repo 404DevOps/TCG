@@ -65,7 +65,7 @@ public class FireGemDeck : DeckBase
     }
 
     [ClientRpc]
-    void RpcShowFireGem()
+    public void RpcShowFireGem()
     {
         var newCard = Instantiate(cardPlaceholder, transform);
         var placeHolder = newCard.GetComponent<CardPlaceholder>();
@@ -76,11 +76,12 @@ public class FireGemDeck : DeckBase
     }
 
     [ClientRpc]
-    void RpcDestroyFireGem()
+    public void RpcDestroyFireGem()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Destroy(transform.GetChild(i).gameObject);
-        } 
+        transform.Clear();
+        //for (int i = 0; i < transform.childCount; i++)
+        //{
+        //    Destroy(transform.GetChild(i).gameObject);
+        //} 
     }
 }

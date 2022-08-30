@@ -18,21 +18,20 @@ public class AutoHostClient : MonoBehaviour
             inputName.text = PlayerPrefs.GetString("PlayerName");
         }
 
-        //if (Application.isBatchMode)
-        //{
-        //    networkManager.networkAddress = networkAdress;
-        //    networkManager.StartHost();
+        if (Application.isBatchMode)
+        {
+            networkManager.networkAddress = networkAdress;
+            networkManager.StartServer();
 
-        //    Debug.Log($"Host \"{networkAdress}\" started.");
-        //}
+            Debug.Log($"Host \"{networkAdress}\" started.");
+        }
     }
 
     public void OnConnectClick()
     {
-
         if (SetPlayerName())
         {
-            Debug.Log("Trying to Connect to Localhost.");
+            Debug.Log($"Trying to Connect to {networkAdress}.");
             networkManager.networkAddress = networkAdress;
             networkManager.StartClient();
         }
@@ -40,13 +39,10 @@ public class AutoHostClient : MonoBehaviour
 
     public void OnHostClick()
     {
-        if (SetPlayerName())
-        {
-            networkManager.networkAddress = networkAdress;
-            networkManager.StartHost();
+        networkManager.networkAddress = networkAdress;
+        networkManager.StartServer();
 
-            Debug.Log($"Host \"{networkAdress}\" started.");
-        }
+        Debug.Log($"Host \"{networkAdress}\" started.");
     }
 
     bool SetPlayerName()

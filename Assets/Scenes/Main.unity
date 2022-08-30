@@ -2250,6 +2250,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1531301759}
     - target: {fileID: 2615326363293336176, guid: 40e68134640ea9040941488ad3b15ffb, type: 3}
+      propertyPath: DamageButton
+      value: 
+      objectReference: {fileID: 914872685}
+    - target: {fileID: 2615326363293336176, guid: 40e68134640ea9040941488ad3b15ffb, type: 3}
+      propertyPath: EndTurnButton
+      value: 
+      objectReference: {fileID: 1111745946}
+    - target: {fileID: 2615326363293336176, guid: 40e68134640ea9040941488ad3b15ffb, type: 3}
       propertyPath: isGameRunning
       value: 0
       objectReference: {fileID: 0}
@@ -4249,7 +4257,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1345753391}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 

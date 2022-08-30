@@ -77,7 +77,16 @@ public class MarketDeck : DeckBase
     [ClientRpc]
     public void RemoveMarketCardRpc(int index)
     {
-        if(marketField.transform.childCount > 0)
-            Destroy(marketField.transform.GetChild(index).gameObject);
+        Debug.Log("Removing Market Card " + index);
+
+        if (index == -1)
+        {
+            marketField.transform.Clear();
+        }
+        else 
+        {
+            if (marketField.transform.childCount > 0)
+                Destroy(marketField.transform.GetChild(index).gameObject);
+        }
     }
 }

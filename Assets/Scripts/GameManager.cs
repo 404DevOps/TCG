@@ -63,6 +63,36 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// used at addplayer to reset the whole game in case someone went out of the game so the server allows for new connections
+    /// </summary>
+    [Server]
+    void ResetGameField()
+    {
+        serverState = ServerState.Connect;
+
+        marketDeck.cards.Clear();
+        fireGemDeck.cards.Clear();
+
+        EndTurnButton.interactable = false;
+        DamageButton.interactable = false;
+
+        foreach (Player p in players)
+        {
+            p.handCards.Clear();
+            p.fieldCards.Clear();
+            p.discardCards.Clear();
+            p.isMyTurn = false;
+        }
+
+        firstTurn = true;
+        isGameRunning = false;
+
+        currentTurnPlayer = 0;
+        fireGemDeck.RpcDestroyFireGem();
+        marketDeck.RemoveMarketCardRpc(-1);
+    }
+
     [Command(requiresAuthority = false)]
     public void CmdPlayCardOnField(Player player, int fieldIndex, int handIndex, string cardId)
     {
@@ -203,8 +233,6 @@ public class GameManager : NetworkBehaviour
     [Client]
     public void OnTurnChanged(uint oldValue, uint newValue)
     {
-        if (EndTurnButton == null)
-            EndTurnButton = GameObject.Find("EndTurn").GetComponent<Button>(); ;
         Debug.Log("Turn Changed.");
         foreach (var p in players)
             p.isMyTurn = p.netId == newValue;
@@ -213,10 +241,12 @@ public class GameManager : NetworkBehaviour
         if (NetworkClient.localPlayer.netId == newValue)
         {
             EndTurnButton.interactable = true;
+            NetworkClient.localPlayer.gameObject.GetComponent<Player>().isMyTurn = true;
             Debug.Log("Players Turn: NetID" + newValue);
         }
         else 
         {
+            NetworkClient.localPlayer.gameObject.GetComponent<Player>().isMyTurn = false;
             EndTurnButton.interactable = false;
         }
     }
@@ -259,6 +289,8 @@ public class GameManager : NetworkBehaviour
         player.HealthPool.Value = 50;
         player.GoldPool.Value = 0;
         player.DamagePool.Value = 0;
+
+        ResetGameField();
 
         if (playerIds.Count == 2)
             ServerNextState("InitializeGameBoard");
